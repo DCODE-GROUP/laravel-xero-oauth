@@ -1,16 +1,14 @@
 <?php
 
-namespace Dcodegroup\LaravelXero;
+namespace Dcodegroup\LaravelXeroOauth;
 
-use App\Models\XeroToken;
-use App\Services\Xero\XeroService;
-use Dcodegroup\LaravelXero\Contracts\XeroServiceInterface;
 use Calcinai\OAuth2\Client\Provider\Xero;
-use Dcodegroup\LaravelXero\Exceptions\XeroOrganisationExpired;
+use Dcodegroup\LaravelXeroOauth\Exceptions\XeroOrganisationExpired;
+use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Illuminate\Support\ServiceProvider;
 use XeroPHP\Application;
 
-class LaravelXeroServiceProvider extends ServiceProvider
+class LaravelXeroOauthServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application events.
@@ -30,7 +28,6 @@ class LaravelXeroServiceProvider extends ServiceProvider
         }
 
         $this->publishes([__DIR__ . '/../config/laravel-xero.php' => config_path('laravel-xero.php')], 'config');
-
     }
 
     /**
@@ -51,7 +48,7 @@ class LaravelXeroServiceProvider extends ServiceProvider
         $this->app->bind(Application::class, function () {
             $client = resolve(Xero::class);
 
-            $token = XeroService::getToken();
+            $token = XeroTokenService::getToken();
 
             if (!$token) {
                 return new Application('fake_id', 'fake_tenant');
@@ -70,10 +67,6 @@ class LaravelXeroServiceProvider extends ServiceProvider
             }
 
             return new Application($token->getToken(), $tenantId);
-        });
-
-        $this->app->bind(XeroServiceInterface::class, function () {
-            return new XeroService(resolve(Application::class));
         });
     }
 }

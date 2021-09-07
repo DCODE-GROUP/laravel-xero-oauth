@@ -1,6 +1,6 @@
 <?php
 
-namespace Dcodegroup\LaravelXero\Exceptions;
+namespace Dcodegroup\LaravelXeroOauth\Exceptions;
 
 use Exception;
 

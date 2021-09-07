@@ -1,5 +1,5 @@
 {
-  "name": "dcodegroup/laravel-xero",
+  "name": "dcodegroup/laravel-xero-oauth",
   "description": "Simple package which dcode uses to handle the connection to xero for all projects. Provides endpoints for UI and callbacks for Xero",
   "keywords": [
     "laravel",
@@ -27,14 +27,15 @@
     "php": "^7.4|^8.0",
     "calcinai/xero-php": "^2.2",
     "laravel/framework": "^7.0  | ^8.0",
-    "xeroapi/xero-php-oauth2": "^2.1"
+    "xeroapi/xero-php-oauth2": "^2.1",
+    "league/oauth2-client": "1.*|2.*"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^2.16"
   },
   "autoload": {
     "psr-4": {
-      "Dcodegroup\\LaravelXero\\": "src"
+      "Dcodegroup\\LaravelXeroOauth\\": "src"
     }
   },
   "scripts": {
@@ -47,7 +48,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Dcodegroup\\LarvelXero\\LaravelXeroServiceProvider"
+        "Dcodegroup\\LarvelXeroOauth\\LaravelXeroOauthServiceProvider"
       ]
     }
   }
