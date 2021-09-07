@@ -1,13 +1,13 @@
 # Laravel Xero
 
-This package provides the standard xero connection interface/ service providers etc which Dcode use on all our projects.
+This package provides the standard xero connection functionality used in most projects.
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require dcodegroup/laravel-xero
+composer require dcodegroup/laravel-xero-oauth
 ```
 
 ## Configuration
@@ -15,5 +15,5 @@ composer require dcodegroup/laravel-xero
 The configuration file can optionally be published via:
 
 ```bash
-php artisan vendor:publish --provider="Dcodegroup\LaravelXero\LaravelXeroServiceProvider"
+php artisan vendor:publish --provider="Dcodegroup\LaravelXeroOauth\LaravelXeroOauthServiceProvider"
 ```
