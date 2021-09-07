@@ -1,0 +1,54 @@
+{
+  "name": "dcodegroup/laravel-xero",
+  "description": "Simple package which dcode uses to handle the connection to xero for all projects. Provides endpoints for UI and callbacks for Xero",
+  "keywords": [
+    "laravel",
+    "xero",
+    "dcode",
+    "oauth"
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Nathan Rzepecki",
+      "email": "nathan@lionslair.net.au",
+      "homepage": "https://www.lionslair.net.au",
+      "role": "Developer"
+    },
+    {
+      "name": "Dcode Group",
+      "email": "forge@dcodegroup.com",
+      "homepage": "https://dcodegroup.com"
+    }
+  ],
+  "require": {
+    "php": "^7.4|^8.0",
+    "calcinai/xero-php": "^2.2",
+    "laravel/framework": "^7.0  | ^8.0",
+    "xeroapi/xero-php-oauth2": "^2.1"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.16"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dcodegroup\\LaravelXero\\": "src"
+    }
+  },
+  "scripts": {
+    "psalm": "vendor/bin/psalm",
+    "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Dcodegroup\\LarvelXero\\LaravelXeroServiceProvider"
+      ]
+    }
+  }
+}
