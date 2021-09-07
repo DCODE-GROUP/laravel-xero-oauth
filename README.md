@@ -17,3 +17,9 @@ The configuration file can optionally be published via:
 ```bash
 php artisan vendor:publish --provider="Dcodegroup\LaravelXeroOauth\LaravelXeroOauthServiceProvider"
 ```
+
+envs
+
+routes
+
+middleware

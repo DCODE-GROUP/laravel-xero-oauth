@@ -5,6 +5,7 @@ namespace Dcodegroup\LaravelXeroOauth;
 use Calcinai\OAuth2\Client\Provider\Xero;
 use Dcodegroup\LaravelXeroOauth\Exceptions\XeroOrganisationExpired;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use XeroPHP\Application;
 
@@ -27,7 +28,11 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
                              ], 'migrations');
         }
 
-        $this->publishes([__DIR__ . '/../config/laravel-xero.php' => config_path('laravel-xero.php')], 'config');
+        $this->publishes([__DIR__ . '/../config/laravel-xero-oauth.php' => config_path('laravel-xero-oauth.php')], 'config');
+
+
+        $this->registerRoutes();
+        $this->registerResources();
     }
 
     /**
@@ -39,9 +44,9 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
     {
         $this->app->singleton(Xero::class, function () {
             return new Xero([
-                                'clientId'     => config('xero.oauth.client_id'),
-                                'clientSecret' => config('xero.oauth.client_secret'),
-                                'redirectUri'  => route('xero.connect.callback'),
+                                'clientId'     => config('laravel-xero-oauth.oauth.client_id'),
+                                'clientSecret' => config('laravel-xero-oauth.oauth.client_secret'),
+                                'redirectUri'  => route('laravel-xero-oauth.connect.callback'),
                             ]);
         });
 
@@ -68,5 +73,18 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
 
             return new Application($token->getToken(), $tenantId);
         });
+
+
+        protected function registerRoutes()
+    {
+        Route::group([
+                         'domain' => config('laravel-.domain', null),
+                         'prefix' => config('horizon.path'),
+                         'namespace' => 'Laravel\Horizon\Http\Controllers',
+                         'middleware' => config('horizon.middleware', 'web'),
+                     ], function () {
+            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        });
+    }
     }
 }
