@@ -29,13 +29,12 @@ class XeroController extends Controller
     }
 
     /**
-     * @return Factory|View
-     * @throws AuthorizationException|IdentityProviderException
-     * @throws UnauthorizedXero
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @throws \Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedXero
+     * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
      */
-    public function index()
+    public function __invoke()
     {
-        $this->authorize('index', XeroToken::class);
         $tenants     = [];
         $token       = XeroTokenService::getToken();
         $latestToken = XeroToken::latestToken();
@@ -48,48 +47,5 @@ class XeroController extends Controller
             'tenants'         => $tenants,
             'currentTenantId' => $latestToken->current_tenant_id ?? null
         ]);
-    }
-
-    /**
-     * @return RedirectResponse
-     * @throws AuthorizationException
-     */
-    public function auth()
-    {
-        $this->authorize('auth', XeroToken::class);
-
-        $authUrl = $this->xeroClient->getAuthorizationUrl([
-            'scope' => [config('xero.oauth.scopes')]
-        ]);
-
-        return redirect()->to($authUrl);
-    }
-
-    /**
-     * @param Request $request
-     * @return RedirectResponse
-     * @throws IdentityProviderException
-     * @throws UnauthorizedXero
-     * @throws AuthorizationException
-     */
-    public function callback(Request $request)
-    {
-        $this->authorize('auth', XeroToken::class);
-
-        if (!$request->has('code') || empty($request->has('code'))) {
-            throw new UnauthorizedXero('Could not authorize Xero!');
-        }
-
-        $token = $this->xeroClient->getAccessToken('authorization_code', [
-            'code' => $request->input('code')
-        ]);
-
-        if (!XeroToken::isValidTokenFormat($token)) {
-            throw new UnauthorizedXero('Token is invalid or the provided token has invalid format!');
-        }
-
-        XeroToken::create($token->jsonSerialize());
-
-        return redirect()->route('xero.index');
     }
 }
