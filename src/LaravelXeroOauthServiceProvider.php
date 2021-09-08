@@ -73,18 +73,16 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
 
             return new Application($token->getToken(), $tenantId);
         });
+    }
 
 
-        protected function registerRoutes()
+    protected function registerRoutes()
     {
         Route::group([
-                         'domain' => config('laravel-.domain', null),
-                         'prefix' => config('horizon.path'),
-                         'namespace' => 'Laravel\Horizon\Http\Controllers',
-                         'middleware' => config('horizon.middleware', 'web'),
+                         'prefix'     => config('laravel-xero-oauth.path'),
+                         'middleware' => config('laravel-xero-oauth.middleware', 'web'),
                      ], function () {
-            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+            $this->loadRoutesFrom(__DIR__ . '/../routes/xero.php');
         });
-    }
     }
 }
