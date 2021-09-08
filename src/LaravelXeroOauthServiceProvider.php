@@ -2,6 +2,7 @@
 
 namespace Dcodegroup\LaravelXeroOauth;
 
+use App\Services\Xero\XeroService;
 use Calcinai\OAuth2\Client\Provider\Xero;
 use Dcodegroup\LaravelXeroOauth\Exceptions\XeroOrganisationExpired;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
@@ -73,6 +74,11 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
 
             return new Application($token->getToken(), $tenantId);
         });
+
+        $this->app->bind('dcodeXeroClient', function () {
+            return new BaseXeroService(resolve(Application::class));
+        });
+
     }
 
 
