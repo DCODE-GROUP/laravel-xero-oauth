@@ -3,16 +3,9 @@
 namespace Dcodegroup\LaravelXeroOauth\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedXero;
-use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Calcinai\OAuth2\Client\Provider\Xero;
+use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Dcodegroup\LaravelXeroOauth\XeroTokenService;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
-use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 
 class XeroController extends Controller
 {
