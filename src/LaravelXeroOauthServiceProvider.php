@@ -7,6 +7,7 @@ use Dcodegroup\LaravelXeroOauth\Commands\InstallCommand;
 use Dcodegroup\LaravelXeroOauth\Exceptions\XeroOrganisationExpired;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use XeroPHP\Application;
 
@@ -85,9 +86,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
      */
     protected function offerPublishing()
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations/');
-
-        if (!class_exists('CreateXeroTokensTable')) {
+        if (!Schema::hasTable('xero_tokens') && !class_exists('CreateXeroTokensTable')) {
             $timestamp = date('Y_m_d_His', time());
 
             $this->publishes([
