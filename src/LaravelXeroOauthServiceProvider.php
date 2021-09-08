@@ -96,12 +96,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
 
         $this->publishes([__DIR__ . '/../config/laravel-xero-oauth.php' => config_path('laravel-xero-oauth.php')], 'laravel-xero-oauth-config');
     }
-
-    /**
-     * Register the Horizon resources.
-     *
-     * @return void
-     */
+    
     protected function registerResources()
     {
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'xero-oauth-translations');
@@ -115,7 +110,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
                          'as'         => config('laravel-xero-oauth.path') . '.',
                          'middleware' => config('laravel-xero-oauth.middleware', 'web'),
                      ], function () {
-            $this->loadRoutesFrom(__DIR__ . '/../routes/xero.php');
-        });
+                         $this->loadRoutesFrom(__DIR__ . '/../routes/xero.php');
+                     });
     }
 }

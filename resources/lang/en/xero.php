@@ -12,5 +12,6 @@ return [
     ],
     'button' => [
         'authorize' => 'Authorize',
+        'select' => 'Select'
     ],
 ];
