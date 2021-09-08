@@ -10,12 +10,18 @@ You can install the package via composer:
 composer require dcodegroup/laravel-xero-oauth
 ```
 
-## Configuration
-
-The configuration file can optionally be published via:
+Then run the install command.
 
 ```bash
-php artisan vendor:publish --provider="Dcodegroup\LaravelXeroOauth\LaravelXeroOauthServiceProvider"
+php artsian laravel-xero:install
+```
+
+This will publish the configuration file and the migration file.
+
+Run the migrations
+
+```bash
+php artsian migrate
 ```
 
 envs

@@ -18,19 +18,19 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Install all of the Dcode Laravel oAuth resources';
+    protected $description = 'Install all of the Laravel Xero resources';
 
     /**
      * @return void
      */
     public function handle()
     {
-        $this->comment('Publishing Horizon Migrations');
+        $this->comment('Publishing Laravel Xero Migrations');
         $this->callSilent('vendor:publish', ['--tag' => 'laravel-xero-oauth-migrations']);
 
-        $this->comment('Publishing Dcode Laravel oAuth Configuration...');
+        $this->comment('Publishing Laravel Xero Configuration...');
         $this->callSilent('vendor:publish', ['--tag' => 'laravel-xero-oauth-config']);
 
-        $this->info('Dcode Laravel oAuth scaffolding installed successfully.');
+        $this->info('Laravel Xero scaffolding installed successfully.');
     }
 }
