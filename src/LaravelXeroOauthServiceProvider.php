@@ -104,8 +104,8 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
      */
     protected function registerResources()
     {
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'xero');
-        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang/en', 'xero');
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'xero-oauth-translations');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'xero-oauth-views');
     }
 
     protected function registerRoutes()
