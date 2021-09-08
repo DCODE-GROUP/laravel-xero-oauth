@@ -1,23 +1,23 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
         <x-slot name="header">
-            <div class="font-semibold text-xl text-gray-800 leading-tight">{{ __('billing.xero.label.header') }}</div>
+            <div class="font-semibold text-xl text-gray-800 leading-tight">{{ __('xero.label.header') }}</div>
         </x-slot>
 
         @if (!$token || $token->toOAuth2Token()->hasExpired())
             <div>
-                <p><i>@lang('billing.xero.status.unauthorized')</i></p>
+                <p><i>@lang('xero.status.unauthorized')</i></p>
                 <a href="{{ route('admin.xero.auth') }}"
-                   class="text-blue-400 underline">  @lang('billing.xero.button.authorize') </a>
+                   class="text-blue-400 underline">  @lang('xero.button.authorize') </a>
             </div>
         @else
-            <p><i>@lang('billing.xero.status.authorized') </i></p>
+            <p><i>@lang('xero.status.authorized') </i></p>
         @endif
         <hr class="mb-2"/>
-        <h3 class="mt-2">@lang('billing.xero.label.accounts')</h3>
+        <h3 class="mt-2">@lang('xero.label.accounts')</h3>
         <div class="mt-2 flex">
             @foreach($tenants as $index => $tenant)
-                <form action="{{ route('admin.xero.tenant.update', $tenant->tenantId) }}" method="POST"
+                <form action="{{ route('xero.tenant.update', $tenant->tenantId) }}" method="POST"
                       novalidate class="flex">
                     @csrf
                     <div class="bg-white p-10 rounded-lg shadow-md text-center

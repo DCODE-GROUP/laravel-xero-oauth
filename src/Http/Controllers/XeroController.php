@@ -43,7 +43,7 @@ class XeroController extends Controller
             $tenants = $this->xeroClient->getTenants($token);
         }
 
-        return view('admin.xero.index', [
+        return view('xero.index', [
             'token'           => $latestToken,
             'tenants'         => $tenants,
             'currentTenantId' => $latestToken->current_tenant_id ?? null
@@ -90,6 +90,6 @@ class XeroController extends Controller
 
         XeroToken::create($token->jsonSerialize());
 
-        return redirect()->route('admin.xero.index');
+        return redirect()->route('xero.index');
     }
 }

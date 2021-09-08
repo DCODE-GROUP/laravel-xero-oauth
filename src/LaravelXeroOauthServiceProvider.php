@@ -17,23 +17,9 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if ($this->app->runningInConsole()) {
-            $this->loadMigrationsFrom(__DIR__ . '/../database/migrations/');
-        }
-
-        if (!class_exists('CreateXeroTokensTable')) {
-            $timestamp = date('Y_m_d_His', time());
-
-            $this->publishes([
-                                 __DIR__ . '/../database/migrations/create_xero_tokens_table.php.stub.php' => database_path('migrations/' . $timestamp . '_create_xero_tokens_table.php'),
-                             ], 'migrations');
-        }
-
-        $this->publishes([__DIR__ . '/../config/laravel-xero-oauth.php' => config_path('laravel-xero-oauth.php')], 'config');
-
-
         $this->registerRoutes();
         $this->registerResources();
+        $this->offerPublishing();
     }
 
     /**
@@ -47,7 +33,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
             return new Xero([
                                 'clientId'     => config('laravel-xero-oauth.oauth.client_id'),
                                 'clientSecret' => config('laravel-xero-oauth.oauth.client_secret'),
-                                'redirectUri'  => route('laravel-xero-oauth.connect.callback'),
+                                'redirectUri'  => route(config('laravel-xero-oauth.path') . '.callback'),
                             ]);
         });
 
@@ -78,14 +64,46 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
         $this->app->bind('dcodeXeroClient', function () {
             return new BaseXeroService(resolve(Application::class));
         });
-
     }
 
+    /**
+     * Setup the resource publishing groups for Dcodegroup Xero oAuth.
+     *
+     * @return void
+     */
+    protected function offerPublishing()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->loadMigrationsFrom(__DIR__ . '/../database/migrations/');
+
+            if (!class_exists('CreateXeroTokensTable')) {
+                $timestamp = date('Y_m_d_His', time());
+
+                $this->publishes([
+                                     __DIR__ . '/../database/migrations/create_xero_tokens_table.php.stub.php' => database_path('migrations/' . $timestamp . '_create_xero_tokens_table.php'),
+                                 ], 'migrations');
+            }
+
+            $this->publishes([__DIR__ . '/../config/laravel-xero-oauth.php' => config_path('laravel-xero-oauth.php')], 'config');
+        }
+    }
+
+    /**
+     * Register the Horizon resources.
+     *
+     * @return void
+     */
+    protected function registerResources()
+    {
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'xero');
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang/en', 'xero');
+    }
 
     protected function registerRoutes()
     {
         Route::group([
                          'prefix'     => config('laravel-xero-oauth.path'),
+                         'as'         => config('laravel-xero-oauth.path', 'xero'),
                          'middleware' => config('laravel-xero-oauth.middleware', 'web'),
                      ], function () {
             $this->loadRoutesFrom(__DIR__ . '/../routes/xero.php');
