@@ -50,7 +50,7 @@
                                     class="text-white py-3 px-8 mt-4 rounded text-sm font-semibold hover:bg-opacity-75
                             @if($tenant->tenantId === $currentTenantId) bg-gray-400 @else bg-blue-400 @endif"
                                     @if($tenant->tenantId === $currentTenantId) disabled @endif
-                            >@lang('xero-oauth-translations::xero.buttons.select')</button>
+                            >@lang('xero-oauth-translations::xero.button.select')</button>
                         </div>
                     </form>
                 @endforeach
