@@ -3,6 +3,7 @@
 namespace Dcodegroup\LaravelXeroOauth;
 
 use Calcinai\OAuth2\Client\Provider\Xero;
+use Dcodegroup\LaravelXeroOauth\Commands\InstallCommand;
 use Dcodegroup\LaravelXeroOauth\Exceptions\XeroOrganisationExpired;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
         $this->offerPublishing();
         $this->registerRoutes();
         $this->registerResources();
+        $this->registerCommands();
     }
 
     /**
@@ -28,10 +30,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(
-            __DIR__.'/../config/laravel-xero-oauth.php',
-            'laravel-xero-oauth'
-        );
+        $this->mergeConfigFrom(__DIR__ . '/../config/laravel-xero-oauth.php', 'laravel-xero-oauth');
 
         $this->app->singleton(Xero::class, function () {
             return new Xero([
@@ -70,6 +69,15 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
         });
     }
 
+    protected function registerCommands()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                                InstallCommand::class,
+                            ]);
+        }
+    }
+
     /**
      * Setup the resource publishing groups for Dcodegroup Xero oAuth.
      *
@@ -77,19 +85,17 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
      */
     protected function offerPublishing()
     {
-        //if ($this->app->runningInConsole()) {
-            $this->loadMigrationsFrom(__DIR__ . '/../database/migrations/');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations/');
 
-            if (!class_exists('CreateXeroTokensTable')) {
-                $timestamp = date('Y_m_d_His', time());
+        if (!class_exists('CreateXeroTokensTable')) {
+            $timestamp = date('Y_m_d_His', time());
 
-                $this->publishes([
-                                     __DIR__ . '/../database/migrations/create_xero_tokens_table.php.stub.php' => database_path('migrations/' . $timestamp . '_create_xero_tokens_table.php'),
-                                 ], 'migrations');
-            }
+            $this->publishes([
+                                 __DIR__ . '/../database/migrations/create_xero_tokens_table.php.stub.php' => database_path('migrations/' . $timestamp . '_create_xero_tokens_table.php'),
+                             ], 'laravel-xero-oauth-migrations');
+        }
 
-            $this->publishes([__DIR__ . '/../config/laravel-xero-oauth.php' => config_path('laravel-xero-oauth.php')], 'config');
-        //}
+        $this->publishes([__DIR__ . '/../config/laravel-xero-oauth.php' => config_path('laravel-xero-oauth.php')], 'laravel-xero-oauth-config');
     }
 
     /**
