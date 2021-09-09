@@ -65,7 +65,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
             return new Application($token->getToken(), $tenantId);
         });
 
-        $this->app->bind('dcodeXeroClient', function () {
+        $this->app->bind(BaseXeroService::class, function () {
             return new BaseXeroService(resolve(Application::class));
         });
     }
