@@ -5,6 +5,7 @@ namespace Dcodegroup\LaravelXeroOauth;
 use Calcinai\OAuth2\Client\Provider\Xero;
 use Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedXero;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
+use Illuminate\Support\Facades\Schema;
 use League\OAuth2\Client\Token\AccessToken;
 
 class XeroTokenService
@@ -15,6 +16,10 @@ class XeroTokenService
      */
     public static function getToken()
     {
+        if (!Schema::hasTable((new XeroToken)->getTable())) {
+            return null;
+        }
+
         $token = XeroToken::latestToken();
         if (!$token) {
             return null;
