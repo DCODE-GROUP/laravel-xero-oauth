@@ -35,9 +35,9 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
 
         $this->app->singleton(Xero::class, function () {
             return new Xero([
-                                'clientId'     => config('laravel-xero-oauth.oauth.client_id'),
+                                'clientId' => config('laravel-xero-oauth.oauth.client_id'),
                                 'clientSecret' => config('laravel-xero-oauth.oauth.client_secret'),
-                                'redirectUri'  => route(config('laravel-xero-oauth.path') . '.callback'),
+                                'redirectUri' => route(config('laravel-xero-oauth.path') . '.callback'),
                             ]);
         });
 
@@ -46,7 +46,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
 
             $token = XeroTokenService::getToken();
 
-            if (!$token) {
+            if (! $token) {
                 return new Application('fake_id', 'fake_tenant');
             }
 
@@ -58,7 +58,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
                 $tenantId = $tenant->tenantId;
             }
 
-            if (!$tenantId) {
+            if (! $tenantId) {
                 throw new XeroOrganisationExpired('There is no configured organisation or the organisation is expired!');
             }
 
@@ -86,7 +86,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
      */
     protected function offerPublishing()
     {
-        if (!Schema::hasTable('xero_tokens') && !class_exists('CreateXeroTokensTable')) {
+        if (! Schema::hasTable('xero_tokens') && ! class_exists('CreateXeroTokensTable')) {
             $timestamp = date('Y_m_d_His', time());
 
             $this->publishes([
@@ -106,8 +106,8 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
     protected function registerRoutes()
     {
         Route::group([
-                         'prefix'     => config('laravel-xero-oauth.path'),
-                         'as'         => config('laravel-xero-oauth.path') . '.',
+                         'prefix' => config('laravel-xero-oauth.path'),
+                         'as' => config('laravel-xero-oauth.path') . '.',
                          'middleware' => config('laravel-xero-oauth.middleware', 'web'),
                      ], function () {
                          $this->loadRoutesFrom(__DIR__ . '/../routes/xero.php');

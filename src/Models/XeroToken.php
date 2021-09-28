@@ -39,13 +39,13 @@ class XeroToken extends Model
      */
     public static function isValidTokenFormat(AccessTokenInterface $token)
     {
-        return !Validator::make($token->jsonSerialize(), [
-            'id_token'      => 'required',
-            'token_type'    => 'required',
-            'access_token'  => 'required',
+        return ! Validator::make($token->jsonSerialize(), [
+            'id_token' => 'required',
+            'token_type' => 'required',
+            'access_token' => 'required',
             'refresh_token' => 'required',
-            'expires'       => 'required',
-            'scope'         => 'required',
+            'expires' => 'required',
+            'scope' => 'required',
         ])->fails();
     }
 }

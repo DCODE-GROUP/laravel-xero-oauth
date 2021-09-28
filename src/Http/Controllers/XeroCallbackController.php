@@ -29,15 +29,15 @@ class XeroCallbackController extends Controller
      */
     public function __invoke(Request $request): RedirectResponse
     {
-        if (!$request->filled('code')) {
+        if (! $request->filled('code')) {
             throw new UnauthorizedXero('Could not authorize Xero!');
         }
 
         $token = $this->xeroClient->getAccessToken('authorization_code', [
-            'code' => $request->input('code')
+            'code' => $request->input('code'),
         ]);
 
-        if (!XeroToken::isValidTokenFormat($token)) {
+        if (! XeroToken::isValidTokenFormat($token)) {
             throw new UnauthorizedXero('Token is invalid or the provided token has invalid format!');
         }
 

@@ -28,17 +28,17 @@ class XeroController extends Controller
      */
     public function __invoke()
     {
-        $tenants     = [];
-        $token       = XeroTokenService::getToken();
+        $tenants = [];
+        $token = XeroTokenService::getToken();
         $latestToken = XeroToken::latestToken();
         if ($token) {
             $tenants = $this->xeroClient->getTenants($token);
         }
 
         return view('xero-oauth-views::index', [
-            'token'           => $latestToken,
-            'tenants'         => $tenants,
-            'currentTenantId' => $latestToken->current_tenant_id ?? null
+            'token' => $latestToken,
+            'tenants' => $tenants,
+            'currentTenantId' => $latestToken->current_tenant_id ?? null,
         ]);
     }
 }

@@ -16,12 +16,12 @@ class XeroTokenService
      */
     public static function getToken()
     {
-        if (!Schema::hasTable((new XeroToken)->getTable())) {
+        if (! Schema::hasTable((new XeroToken)->getTable())) {
             return null;
         }
 
         $token = XeroToken::latestToken();
-        if (!$token) {
+        if (! $token) {
             return null;
         }
 
@@ -30,11 +30,11 @@ class XeroTokenService
         if ($oauth2Token->hasExpired()) {
             $oauth2Token = self::getAccessTokenFromXero($oauth2Token);
 
-            if (!XeroToken::isValidTokenFormat($oauth2Token)) {
+            if (! XeroToken::isValidTokenFormat($oauth2Token)) {
                 throw new UnauthorizedXero('Token is invalid or the provided token has invalid format!');
             }
 
-            XeroToken::create(array_merge($oauth2Token->jsonSerialize(), ['current_tenant_id'=> $token->current_tenant_id]));
+            XeroToken::create(array_merge($oauth2Token->jsonSerialize(), ['current_tenant_id' => $token->current_tenant_id]));
         }
 
         return $oauth2Token;
