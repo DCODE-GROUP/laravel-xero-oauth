@@ -90,7 +90,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
             $timestamp = date('Y_m_d_His', time());
 
             $this->publishes([
-                                 __DIR__ . '/../database/migrations/create_xero_tokens_table.php.stub.php' => database_path('migrations/' . $timestamp . '_create_xero_tokens_table.php'),
+                                 __DIR__ . '/../database/migrations/create_xero_tokens_table.stub.php' => database_path('migrations/' . $timestamp . '_create_xero_tokens_table.php'),
                              ], 'laravel-xero-oauth-migrations');
         }
 
