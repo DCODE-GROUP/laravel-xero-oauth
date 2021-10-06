@@ -4,7 +4,6 @@ namespace Dcodegroup\LaravelXeroOauth;
 
 use Exception;
 use XeroPHP\Application;
-use XeroPHP\Remote\Collection;
 use XeroPHP\Remote\Exception\NotFoundException;
 
 class BaseXeroService
@@ -27,17 +26,17 @@ class BaseXeroService
         if ($parameter) {
             $response = $response->first()->{'get' . $parameter}();
         } else {
-            if (!$guid) {
+            if (! $guid) {
                 $response = $response->execute();
             }
         }
 
-        return !$guid ? collect($response) : $response;
+        return ! $guid ? collect($response) : $response;
     }
 
     public function searchModel($model, array $where, $guids = null, $parameter = null)
     {
-        if (!is_null($guids)) {
+        if (! is_null($guids)) {
             $response = $this->xeroClient->loadByGUIDs($model, $guids);
         } else {
             $response = $this->xeroClient->load($model);
