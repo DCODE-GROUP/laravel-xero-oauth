@@ -75,6 +75,7 @@ class BaseXeroService
             $request->save();
         } catch (Exception | NotFoundException $e) {
             report($e);
+            return $e;
         }
 
         return $request;
@@ -106,7 +107,12 @@ class BaseXeroService
             $request->setDirty($object);
         }
 
-        $request->save();
+        try {
+            $request->save();
+        } catch (Exception | NotFoundException $e) {
+            report($e);
+            return $e;
+        }
 
         return $request;
     }
