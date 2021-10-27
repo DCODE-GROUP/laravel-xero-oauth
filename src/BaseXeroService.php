@@ -75,6 +75,7 @@ class BaseXeroService
             $request->save();
         } catch (Exception | NotFoundException $e) {
             report($e);
+
             return $e;
         }
 
@@ -111,6 +112,7 @@ class BaseXeroService
             $request->save();
         } catch (Exception | NotFoundException $e) {
             report($e);
+
             return $e;
         }
 
