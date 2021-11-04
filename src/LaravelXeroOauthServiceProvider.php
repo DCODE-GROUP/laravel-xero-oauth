@@ -47,7 +47,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
 
             try {
                 $token = XeroTokenService::getToken();
-            } catch (Exception $e)             {
+            } catch (Exception $e) {
                 return new Application('fake_id', 'fake_tenant');
             }
 
