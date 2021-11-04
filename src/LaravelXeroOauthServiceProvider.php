@@ -53,7 +53,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
                 }
 
                 $latest = XeroToken::latestToken();
-            } catch (Exception $e)             {
+            } catch (Exception $e) {
                 return new Application('fake_id', 'fake_tenant');
             }
 
