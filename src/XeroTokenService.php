@@ -11,17 +11,19 @@ use League\OAuth2\Client\Token\AccessToken;
 class XeroTokenService
 {
     /**
-     * @return \League\OAuth2\Client\Token\AccessToken|mixed|null
      * @throws \Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedXero
+     *
+     * @return null|\League\OAuth2\Client\Token\AccessToken|mixed
      */
     public static function getToken()
     {
-        if (! Schema::hasTable((new XeroToken)->getTable())) {
+        if (!Schema::hasTable((new XeroToken())->getTable())) {
             return null;
         }
 
         $token = XeroToken::latestToken();
-        if (! $token) {
+
+        if (!$token) {
             return null;
         }
 
@@ -30,7 +32,7 @@ class XeroTokenService
         if ($oauth2Token->hasExpired()) {
             $oauth2Token = self::getAccessTokenFromXero($oauth2Token);
 
-            if (! XeroToken::isValidTokenFormat($oauth2Token)) {
+            if (!XeroToken::isValidTokenFormat($oauth2Token)) {
                 throw new UnauthorizedXero('Token is invalid or the provided token has invalid format!');
             }
 
@@ -41,8 +43,6 @@ class XeroTokenService
     }
 
     /**
-     * @param  \League\OAuth2\Client\Token\AccessToken  $token
-     *
      * @return mixed
      */
     private static function getAccessTokenFromXero(AccessToken $token)
