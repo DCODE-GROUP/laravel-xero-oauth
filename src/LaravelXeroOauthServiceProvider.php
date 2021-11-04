@@ -6,6 +6,7 @@ use Calcinai\OAuth2\Client\Provider\Xero;
 use Dcodegroup\LaravelXeroOauth\Commands\InstallCommand;
 use Dcodegroup\LaravelXeroOauth\Exceptions\XeroOrganisationExpired;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
+use Exception;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -44,7 +45,11 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
         $this->app->bind(Application::class, function () {
             $client = resolve(Xero::class);
 
-            $token = XeroTokenService::getToken();
+            try {
+                $token = XeroTokenService::getToken();
+            } catch (Exception $e)             {
+                return new Application('fake_id', 'fake_tenant');
+            }
 
             if (! $token) {
                 return new Application('fake_id', 'fake_tenant');
