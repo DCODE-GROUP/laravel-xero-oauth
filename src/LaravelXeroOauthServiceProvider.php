@@ -45,7 +45,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
             try {
                 $token = XeroTokenService::getToken();
 
-                if (!$token) {
+                if (! $token) {
                     return new Application('fake_id', 'fake_tenant');
                 }
 
@@ -61,7 +61,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
                 $tenantId = $tenant->tenantId;
             }
 
-            if (!$tenantId) {
+            if (! $tenantId) {
                 throw new XeroOrganisationExpired('There is no configured organisation or the organisation is expired!');
             }
 
@@ -87,7 +87,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
      */
     protected function offerPublishing()
     {
-        if (!class_exists('CreateXeroTokensTable')) {
+        if (! class_exists('CreateXeroTokensTable')) {
             $timestamp = date('Y_m_d_His', time());
 
             $this->publishes([
