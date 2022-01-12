@@ -51,11 +51,5 @@
         "Dcodegroup\\LaravelXeroOauth\\LaravelXeroOauthServiceProvider"
       ]
     }
-  },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/lionslair/xero-php.git"
-    }
-  ]
+  }
 }
