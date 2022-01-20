@@ -7,11 +7,11 @@ use Dcodegroup\LaravelXeroOauth\Commands\InstallCommand;
 use Dcodegroup\LaravelXeroOauth\Exceptions\XeroOrganisationExpired;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Exception;
+use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Http\Response as IlluminateResponse;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\View;
-use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use XeroPHP\Application;
@@ -129,7 +129,6 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
     private function registerResponseHandler()
     {
         Event::listen(RequestHandled::class, function (RequestHandled $event) {
-
             if (Str::startsWith($event->request->route()->getName(), config('laravel-xero-oauth.path').'.')) {
                 $content = $event->response->getContent();
 
