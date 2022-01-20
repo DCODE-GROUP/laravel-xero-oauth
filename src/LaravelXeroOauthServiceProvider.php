@@ -7,8 +7,13 @@ use Dcodegroup\LaravelXeroOauth\Commands\InstallCommand;
 use Dcodegroup\LaravelXeroOauth\Exceptions\XeroOrganisationExpired;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Exception;
+use Illuminate\Http\Response as IlluminateResponse;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\View;
+use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use XeroPHP\Application;
 
 class LaravelXeroOauthServiceProvider extends ServiceProvider
@@ -22,6 +27,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
         $this->registerRoutes();
         $this->registerResources();
         $this->registerCommands();
+        $this->registerResponseHandler();
     }
 
     /**
@@ -112,6 +118,41 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
             'middleware' => config('laravel-xero-oauth.middleware', 'web'),
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/../routes/xero.php');
+        });
+    }
+
+    /**
+     * Listen to the RequestHandled event to prepare the Response.
+     *
+     * @return void
+     */
+    private function registerResponseHandler()
+    {
+        Event::listen(RequestHandled::class, function (RequestHandled $event) {
+
+            if (Str::startsWith($event->request->route()->getName(), config('laravel-xero-oauth.path').'.')) {
+                $content = $event->response->getContent();
+
+                $head = View::make('xero-oauth-views::head')->render();
+
+                // Try to put the js/css directly before the </head>
+                $pos = strripos($content, '</head>');
+                if (false !== $pos) {
+                    $content = substr($content, 0, $pos).$head.substr($content, $pos);
+                }
+
+                $original = null;
+                if ($event->response instanceof IlluminateResponse && $event->response->getOriginalContent()) {
+                    $original = $event->response->getOriginalContent();
+                }
+
+                $event->response->setContent($content);
+
+                // Restore original response (eg. the View or Ajax data)
+                if ($original) {
+                    $event->response->original = $original;
+                }
+            }
         });
     }
 }
