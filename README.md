@@ -28,6 +28,9 @@ php artsian migrate
 
 Most of configuration has been set the fair defaults. However you can review the configuration file at `config/laravel-xero-oauth.php` and adjust as needed
 
+If you want to have the oauth screens appear within your sites layout ensure to configure the environment variable. eg.
+
+`LARAVEL_XERO_OAUTH_APP_LAYOUT=layouts.admin`
 
 ## Usage
 

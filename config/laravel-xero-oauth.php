@@ -2,9 +2,9 @@
 
 return [
     'oauth' => [
-        'client_id'     => env('XERO_CLIENT_ID', ''),
+        'client_id' => env('XERO_CLIENT_ID', ''),
         'client_secret' => env('XERO_CLIENT_SECRET', ''),
-        'scopes'        => env('XERO_SCOPE', 'openid email profile accounting.settings accounting.transactions accounting.contacts offline_access payroll.payruns payroll.employees payroll.timesheets payroll.settings payroll.settings.read accounting.attachments'),
+        'scopes' => env('XERO_SCOPE', 'openid email profile accounting.settings accounting.transactions accounting.contacts offline_access payroll.payruns payroll.employees payroll.timesheets payroll.settings payroll.settings.read accounting.attachments'),
     ],
 
     /*
@@ -33,7 +33,24 @@ return [
     |
     */
 
-    'middleware' => ['web', 'auth'],
+    'middleware' => [
+        'web',
+        'auth',
+    ],
+
     'exclude_middleware_for_callback' => ['auth'],
+
+    /*
+     * --------------------------------------------------------------------------
+     * Laravel Xero oAuth Layout
+     * --------------------------------------------------------------------------
+     *
+     * The name of the base layout to wrap the pages in.
+     * The exposed routes will have to know the layout of the app in order to
+     * appear to look like the rest of the site. If one is not set then the internal one will be used.
+     *
+     */
+
+    'app_layout' => env('LARAVEL_XERO_OAUTH_APP_LAYOUT', 'xero-oauth-views::layout'),
 
 ];
