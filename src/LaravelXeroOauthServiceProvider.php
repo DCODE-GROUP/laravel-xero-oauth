@@ -129,7 +129,12 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
     private function registerResponseHandler()
     {
         Event::listen(RequestHandled::class, function (RequestHandled $event) {
-            if (Str::startsWith($event->request->route()->getName(), config('laravel-xero-oauth.path').'.')) {
+            if (! $event->request->ajax() &&
+                (($event->response->headers->has('Content-Type') && strpos($event->response->headers->get('Content-Type'), 'html') === true)
+                    || $event->request->getRequestFormat() == 'html'
+                    || stripos($event->response->headers->get('Content-Disposition'), 'attachment;') === false) &&
+                Str::startsWith($event->request->route()?->getName(), config('laravel-xero-oauth.path').'.')) {
+
                 $content = $event->response->getContent();
 
                 $head = View::make('xero-oauth-views::head')->render();
