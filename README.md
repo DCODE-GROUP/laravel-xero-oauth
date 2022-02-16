@@ -1,3 +1,7 @@
+[![Latest Version](https://img.shields.io/github/release/dcodegroup/laravel-xero-oauth.svg?style=flat-square)](https://github.com/dcodegroup/laravel-xero-oauth/releases)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/dcodegroup/laravel-xero-oauth/Check%20&%20fix%20styling)
+[![Total Downloads](https://img.shields.io/packagist/dt/dcodegroup/laravel-xero-oauth.svg?style=flat-square)](https://packagist.org/packages/dcodegroup/laravel-xero-oauth)
+
 # Laravel Xero
 
 This package provides the standard xero connection functionality used in most projects.
