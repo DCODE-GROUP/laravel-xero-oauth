@@ -30,7 +30,7 @@ class InstallCommand extends Command
             $this->comment('Publishing Laravel Xero Migrations');
             $this->callSilent('vendor:publish', ['--tag' => 'laravel-xero-oauth-migrations']);
         }
-        
+
         $this->comment('Publishing Laravel Xero Configuration...');
         $this->callSilent('vendor:publish', ['--tag' => 'laravel-xero-oauth-config']);
 

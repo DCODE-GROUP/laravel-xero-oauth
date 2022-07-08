@@ -24,7 +24,7 @@ class BaseXeroService
         }
 
         if ($parameter) {
-            $response = $response->first()->{'get' . $parameter}();
+            $response = $response->first()->{'get'.$parameter}();
         } else {
             if (! $guid) {
                 $response = $response->execute();
@@ -47,7 +47,7 @@ class BaseXeroService
         }
 
         if ($parameter) {
-            return $response->first()->{'get' . $parameter}();
+            return $response->first()->{'get'.$parameter}();
         }
 
         return $response->first();
@@ -58,16 +58,16 @@ class BaseXeroService
         $request = new $model($this->xeroClient);
 
         foreach ($parameters as $parameter => $value) {
-            $request->{'set' . $parameter}($value);
+            $request->{'set'.$parameter}($value);
         }
 
         foreach ($objects as $object => $value) {
             if (is_array($value)) {
                 foreach ($value as $key => $item) {
-                    $request->{'add' . (is_string($key) ? $key : $object)}($item);
+                    $request->{'add'.(is_string($key) ? $key : $object)}($item);
                 }
             } else {
-                $request->{'add' . $object}($value);
+                $request->{'add'.$object}($value);
             }
         }
 
@@ -86,23 +86,23 @@ class BaseXeroService
     {
         if (is_object($guid)) {
             $request = new $model($this->xeroClient);
-            $request->{'set' . $guid->identifier}($guid->guid);
+            $request->{'set'.$guid->identifier}($guid->guid);
         } else {
             $request = $this->xeroClient->loadByGUID($model, $guid);
         }
 
         foreach ($parameters as $parameter => $value) {
-            $request->{'set' . $parameter}($value);
+            $request->{'set'.$parameter}($value);
             $request->setDirty($parameter);
         }
 
         foreach ($objects as $object => $value) {
             if (is_array($value)) {
                 foreach ($value as $key => $item) {
-                    $request->{'add' . $key}($item);
+                    $request->{'add'.$key}($item);
                 }
             } else {
-                $request->{'add' . $object}($value);
+                $request->{'add'.$object}($value);
             }
 
             $request->setDirty($object);

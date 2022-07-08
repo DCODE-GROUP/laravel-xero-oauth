@@ -1,8 +1,8 @@
 <?php
 
+use Dcodegroup\LaravelXeroOauth\Http\Controllers\SwitchXeroTenantController;
 use Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroAuthController;
 use Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroCallbackController;
-use Dcodegroup\LaravelXeroOauth\Http\Controllers\SwitchXeroTenantController;
 use Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroController;
 use Illuminate\Support\Facades\Route;
 

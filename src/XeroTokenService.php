@@ -11,9 +11,9 @@ use League\OAuth2\Client\Token\AccessToken;
 class XeroTokenService
 {
     /**
-     * @throws \Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedXero
-     *
      * @return null|\League\OAuth2\Client\Token\AccessToken|mixed
+     *
+     * @throws \Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedXero
      */
     public static function getToken()
     {

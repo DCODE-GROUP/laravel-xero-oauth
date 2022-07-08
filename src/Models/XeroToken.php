@@ -34,7 +34,6 @@ class XeroToken extends Model
 
     /**
      * @param  AccessTokenInterface  $token
-     *
      * @return bool
      */
     public static function isValidTokenFormat(AccessTokenInterface $token)

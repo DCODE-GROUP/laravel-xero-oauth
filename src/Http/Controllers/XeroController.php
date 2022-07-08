@@ -14,7 +14,7 @@ class XeroController extends Controller
     /**
      * XeroController constructor.
      *
-     * @param Xero $xero
+     * @param  Xero  $xero
      */
     public function __construct(Xero $xero)
     {
@@ -23,6 +23,7 @@ class XeroController extends Controller
 
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     *
      * @throws \Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedXero
      * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
      */

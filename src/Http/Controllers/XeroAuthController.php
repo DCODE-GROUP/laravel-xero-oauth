@@ -13,7 +13,7 @@ class XeroAuthController extends Controller
     /**
      * XeroController constructor.
      *
-     * @param Xero $xero
+     * @param  Xero  $xero
      */
     public function __construct(Xero $xero)
     {
@@ -23,7 +23,7 @@ class XeroAuthController extends Controller
     public function __invoke(): RedirectResponse
     {
         return redirect()->to($this->xeroClient->getAuthorizationUrl([
-                                                                         'scope' => [config('laravel-xero-oauth.oauth.scopes')],
-                                                                     ]));
+            'scope' => [config('laravel-xero-oauth.oauth.scopes')],
+        ]));
     }
 }
