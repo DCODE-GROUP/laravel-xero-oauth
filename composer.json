@@ -30,9 +30,6 @@
     "xeroapi/xero-php-oauth2": "^2.1",
     "league/oauth2-client": "1.*|2.*"
   },
-  "require-dev": {
-    "friendsofphp/php-cs-fixer": "^2.16"
-  },
   "autoload": {
     "psr-4": {
       "Dcodegroup\\LaravelXeroOauth\\": "src"
@@ -51,5 +48,8 @@
         "Dcodegroup\\LaravelXeroOauth\\LaravelXeroOauthServiceProvider"
       ]
     }
+  },
+  "require-dev": {
+    "laravel/pint": "^0.2.3"
   }
 }

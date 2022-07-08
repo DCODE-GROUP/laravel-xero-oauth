@@ -62,7 +62,7 @@ More Information
 
 `example.com/xero` Which is where you will generate the link to authorise xero. This is by default protected auth middleware but you can modify in the configuration. This is where you want to link to in your admin and possibly a new window
 
-`example.com/xero/callback` This is the route for which xero will redirect back tp after the oauth has occurred. This is excluded from the middleware auth. You can change this list in the configuration also.
+`example.com/xero/callback` This is the route for which xero will redirect back to after the oauth has occurred. This is excluded from the middleware auth. You can change this list in the configuration also.
 
 ## BaseXeroService
 
