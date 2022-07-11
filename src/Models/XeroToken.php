@@ -2,6 +2,7 @@
 
 namespace Dcodegroup\LaravelXeroOauth\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
 use League\OAuth2\Client\Token\AccessToken;
@@ -9,6 +10,8 @@ use League\OAuth2\Client\Token\AccessTokenInterface;
 
 class XeroToken extends Model
 {
+    use HasFactory;
+
     /**
      * Fields that are not mass assignable
      *
