@@ -15,8 +15,6 @@ class XeroCallbackController extends Controller
 
     /**
      * XeroController constructor.
-     *
-     * @param  Xero  $xero
      */
     public function __construct(Xero $xero)
     {

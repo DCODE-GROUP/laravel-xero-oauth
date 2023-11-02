@@ -146,7 +146,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
 
                 // Try to put the js/css directly before the </head>
                 $pos = strripos($content, '</head>');
-                if (false !== $pos) {
+                if ($pos !== false) {
                     $content = substr($content, 0, $pos).$head.substr($content, $pos);
                 }
 
