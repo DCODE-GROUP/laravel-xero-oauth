@@ -55,12 +55,14 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
 
                 if (! $token) {
                     Config::set('app.laravel_xero_fake_tenant', true);
+
                     return new Application('fake_id', 'fake_tenant');
                 }
 
                 $latest = XeroToken::latestToken();
             } catch (Exception $e) {
                 Config::set('app.laravel_xero_fake_tenant', true);
+
                 return new Application('fake_id', 'fake_tenant');
             }
 
