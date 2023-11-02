@@ -9,6 +9,7 @@ use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Exception;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Http\Response as IlluminateResponse;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
@@ -47,16 +48,19 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
 
         $this->app->bind(Application::class, function () {
             $client = resolve(Xero::class);
+            Config::set('app.laravel_xero_fake_tenant', false);
 
             try {
                 $token = XeroTokenService::getToken();
 
                 if (! $token) {
+                    Config::set('app.laravel_xero_fake_tenant', true);
                     return new Application('fake_id', 'fake_tenant');
                 }
 
                 $latest = XeroToken::latestToken();
             } catch (Exception $e) {
+                Config::set('app.laravel_xero_fake_tenant', true);
                 return new Application('fake_id', 'fake_tenant');
             }
 
