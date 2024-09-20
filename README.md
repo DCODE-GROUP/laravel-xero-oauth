@@ -107,3 +107,13 @@ class XeroService extends BaseXeroService
 
 }
 ```
+
+## Runtime
+
+You can check if the connection exists with the below code
+
+```php
+if (app(Application::class)->getTransport()->getConfig()['headers']['Xero-tenant-id'] != 'fake_tenant') {
+        // do something
+}
+```
