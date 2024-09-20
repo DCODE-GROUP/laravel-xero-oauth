@@ -17,7 +17,7 @@ class XeroTokenService
      */
     public static function getToken()
     {
-        if (! Schema::hasTable((new XeroToken())->getTable())) {
+        if (! Schema::hasTable((new XeroToken)->getTable())) {
             return null;
         }
 
