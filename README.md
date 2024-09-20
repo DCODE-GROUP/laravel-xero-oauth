@@ -110,7 +110,7 @@ class XeroService extends BaseXeroService
 
 ## Runtime
 
-You can check if the connection exists with the below code
+You can check if the connection exists with the below code. (This will not work once `->getConfig()` is removed in Guzzle 8 https://github.com/guzzle/guzzle/issues/3114 )
 
 ```php
 if (app(Application::class)->getTransport()->getConfig()['headers']['Xero-tenant-id'] != 'fake_tenant') {
