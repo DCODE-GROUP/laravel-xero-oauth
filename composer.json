@@ -1,55 +1,76 @@
 {
-  "name": "dcodegroup/laravel-xero-oauth",
-  "description": "Simple package which dcode uses to handle the connection to xero for all projects. Provides endpoints for UI and callbacks for Xero",
-  "keywords": [
-    "laravel",
-    "xero",
-    "dcode",
-    "oauth"
-  ],
-  "minimum-stability": "dev",
-  "prefer-stable": true,
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Nathan Rzepecki",
-      "email": "nathan@lionslair.net.au",
-      "homepage": "https://nahtanrzepecki.me",
-      "role": "Developer"
+    "name": "dcodegroup/laravel-xero-oauth",
+    "description": "Simple package which dcode uses to handle the connection to xero for all projects. Provides endpoints for UI and callbacks for Xero",
+    "keywords": [
+        "laravel",
+        "xero",
+        "dcode",
+        "oauth"
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nathan Rzepecki",
+            "email": "nathan@lionslair.net.au",
+            "homepage": "https://nahtanrzepecki.me",
+            "role": "Developer"
+        },
+        {
+            "name": "Dcode Group",
+            "email": "forge@dcodegroup.com",
+            "homepage": "https://dcodegroup.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "calcinai/xero-php": "^2.5",
+        "laravel/framework": "^10.0|^11.0|^12.0",
+        "league/oauth2-client": "2.*",
+        "xeroapi/xero-php-oauth2": "^11.0"
     },
-    {
-      "name": "Dcode Group",
-      "email": "forge@dcodegroup.com",
-      "homepage": "https://dcodegroup.com"
+    "require-dev": {
+        "laravel/pint": "^1.13.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dcodegroup\\LaravelXeroOauth\\": "src"
+        }
+    },
+    "scripts": {
+        "format": "vendor/bin/pint",
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
+        ],
+        "lint": [
+            "@php vendor/bin/pint --ansi"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Dcodegroup\\LaravelXeroOauth\\LaravelXeroOauthServiceProvider"
+            ]
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+        }
     }
-  ],
-  "require": {
-    "php": "^8.1",
-    "calcinai/xero-php": "^2.5",
-    "laravel/framework": "^10.0|^11.0|^12.0",
-    "xeroapi/xero-php-oauth2": "^11.0",
-    "league/oauth2-client": "2.*"
-  },
-  "require-dev": {
-    "laravel/pint": "^1.13.5"
-  },
-  "autoload": {
-    "psr-4": {
-      "Dcodegroup\\LaravelXeroOauth\\": "src"
-    }
-  },
-  "scripts": {
-    "psalm": "vendor/bin/psalm",
-    "format": "vendor/bin/pint"
-  },
-  "config": {
-    "sort-packages": true
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Dcodegroup\\LaravelXeroOauth\\LaravelXeroOauthServiceProvider"
-      ]
-    }
-  }
 }

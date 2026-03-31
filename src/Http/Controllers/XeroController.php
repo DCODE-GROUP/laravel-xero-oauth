@@ -2,10 +2,10 @@
 
 namespace Dcodegroup\LaravelXeroOauth\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Calcinai\OAuth2\Client\Provider\Xero;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Dcodegroup\LaravelXeroOauth\XeroTokenService;
+use Illuminate\Routing\Controller;
 
 class XeroController extends Controller
 {

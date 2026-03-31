@@ -2,12 +2,13 @@
 
 namespace Dcodegroup\LaravelXeroOauth\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Calcinai\OAuth2\Client\Provider\Xero;
 use Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedXero;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Session;
 
 class XeroCallbackController extends Controller
 {
@@ -39,8 +40,26 @@ class XeroCallbackController extends Controller
             throw new UnauthorizedXero('Token is invalid or the provided token has invalid format!');
         }
 
-        XeroToken::create($token->jsonSerialize());
+        $data = $token->jsonSerialize();
 
-        return redirect()->route('xero.index');
+        if (! empty(config('laravel-xero-oauth.multi_tenant_model'))) {
+            $data['tenant_id'] = null;
+            $sessionName = config('laravel-xero-oauth.current_app_tenant_session_name');
+            if (! empty($sessionName) && Session::has($sessionName)) {
+                $tenantId = Session::get($sessionName);
+                $data['tenant_id'] = $tenantId;
+            }     
+        }
+
+        XeroToken::create($data);
+
+        $url = route('xero.index');
+        $sessionName = config('laravel-xero-oauth.callback_redirect_session_name');
+
+        if (! empty($sessionName) && Session::has($sessionName)) {
+            $url = Session::get($sessionName);
+        }
+
+        return redirect()->to($url);
     }
 }

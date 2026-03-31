@@ -2,9 +2,9 @@
 
 namespace Dcodegroup\LaravelXeroOauth\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Controller;
 
 class SwitchXeroTenantController extends Controller
 {
