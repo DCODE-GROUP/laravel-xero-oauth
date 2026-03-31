@@ -1,12 +1,8 @@
 <?php
 
-use Dcodegroup\LaravelXeroOauth\Http\Controllers\SwitchXeroTenantController;
-use Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroAuthController;
-use Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroCallbackController;
-use Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', XeroController::class)->name('index');
-Route::get('/auth', XeroAuthController::class)->name('auth');
-Route::get('/callback', XeroCallbackController::class)->name('callback');
-Route::post('/tenants/{tenantId}/', SwitchXeroTenantController::class)->name('tenant.update');
+Route::get('/', config('laravel-xero-oauth.route_controllers.index'))->name('index');
+Route::get('/auth', config('laravel-xero-oauth.route_controllers.auth'))->name('auth');
+Route::get('/callback', config('laravel-xero-oauth.route_controllers.callback'))->name('callback');
+Route::post('/tenants/{tenantId}/', config('laravel-xero-oauth.route_controllers.tenant_update'))->name('tenant.update');
