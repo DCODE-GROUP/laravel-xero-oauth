@@ -3,9 +3,14 @@
 namespace Dcodegroup\LaravelXeroOauth\Http\Controllers;
 
 use Calcinai\OAuth2\Client\Provider\Xero;
+use Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedXero;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Dcodegroup\LaravelXeroOauth\XeroTokenService;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Routing\Controller;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 
 class XeroController extends Controller
 {
@@ -20,10 +25,10 @@ class XeroController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      *
-     * @throws \Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedXero
-     * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
+     * @throws UnauthorizedXero
+     * @throws IdentityProviderException
      */
     public function __invoke()
     {

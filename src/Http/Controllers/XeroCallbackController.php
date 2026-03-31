@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Session;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 
 class XeroCallbackController extends Controller
 {
@@ -23,8 +24,8 @@ class XeroCallbackController extends Controller
     }
 
     /**
-     * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
-     * @throws \Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedXero
+     * @throws IdentityProviderException
+     * @throws UnauthorizedXero
      */
     public function __invoke(Request $request): RedirectResponse
     {
@@ -48,7 +49,7 @@ class XeroCallbackController extends Controller
             if (! empty($sessionName) && Session::has($sessionName)) {
                 $tenantId = Session::get($sessionName);
                 $data['tenant_id'] = $tenantId;
-            }     
+            }
         }
 
         XeroToken::create($data);
