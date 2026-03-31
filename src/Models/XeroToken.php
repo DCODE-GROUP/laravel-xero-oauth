@@ -4,6 +4,7 @@ namespace Dcodegroup\LaravelXeroOauth\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Validator;
 use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Token\AccessTokenInterface;
@@ -48,5 +49,10 @@ class XeroToken extends Model
             'expires' => 'required',
             'scope' => 'required',
         ])->fails();
+    }
+
+    public function tenant(): BelongsTo
+    {
+        return $this->belongsTo(config('laravel-xero-oauth.multi_tenant_model'), 'tenant_id');
     }
 }
