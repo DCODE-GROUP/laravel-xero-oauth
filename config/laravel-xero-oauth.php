@@ -1,5 +1,11 @@
 <?php
 
+use Dcodegroup\LaravelXeroOauth\Http\Controllers\SwitchXeroTenantController;
+use Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroAuthController;
+use Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroCallbackController;
+use Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroCloseController;
+use Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroController;
+
 return [
     'oauth' => [
         'client_id' => env('XERO_CLIENT_ID', ''),
@@ -24,9 +30,9 @@ return [
     | Laravel Xero oAuth Callback Redirect URL Session Name
     |--------------------------------------------------------------------------
     |
-    | If you want to dynamically set the callback redirect URL, you can specify 
-    | a session name here. The value of that session will be used as the 
-    | callback redirect URL after successful authentication with Xero. 
+    | If you want to dynamically set the callback redirect URL, you can specify
+    | a session name here. The value of that session will be used as the
+    | callback redirect URL after successful authentication with Xero.
     | If this is null, then the default will be used.
     |
     */
@@ -38,17 +44,17 @@ return [
     | Laravel Xero oAuth Route Controllers
     |--------------------------------------------------------------------------
     |
-    | Here you can specify the controllers that will be used for each route. 
+    | Here you can specify the controllers that will be used for each route.
     | This allows you to easily swap out the default controllers with your own custom ones if needed.
     |
     */
 
     'route_controllers' => [
-        'index' => Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroController::class,
-        'auth' => Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroAuthController::class,
-        'callback' => Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroCallbackController::class,
-        'tenants' => Dcodegroup\LaravelXeroOauth\Http\Controllers\SwitchXeroTenantController::class,
-        'close' => Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroCloseController::class,
+        'index' => XeroController::class,
+        'auth' => XeroAuthController::class,
+        'callback' => XeroCallbackController::class,
+        'tenants' => SwitchXeroTenantController::class,
+        'close' => XeroCloseController::class,
     ],
 
     /*
@@ -91,12 +97,12 @@ return [
     |--------------------------------------------------------------------------
     |
     | Model to use for multi-tenanted support. If null, multi-tenancy will be disabled.
-    | Session name to use to get current tenant Id. If null, current tenant 
+    | Session name to use to get current tenant Id. If null, current tenant
     | will be set to null.
     |
     */
 
     'multi_tenant_model' => null,
 
-    'current_app_tenant_session_name' => null, 
+    'current_app_tenant_session_name' => null,
 ];
