@@ -3,7 +3,6 @@
 namespace Dcodegroup\LaravelXeroOauth\Tests\Unit\Models;
 
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
-use Illuminate\Support\Facades\Validator;
 use League\OAuth2\Client\Token\AccessToken;
 
 use function Pest\Laravel\assertDatabaseCount;
@@ -245,9 +244,9 @@ describe('XeroToken Model - Token Validation', function () {
     it('rejects token missing access_token', function () {
         // Access token requires the access_token field, so trying to create without it will throw
         // We need to handle this differently - we'll test that validation catches incomplete structures
-        
+
         $this->expectException(\InvalidArgumentException::class);
-        
+
         $tokenData = [
             'id_token' => 'id_token_value',
             'token_type' => 'Bearer',
@@ -340,19 +339,19 @@ describe('XeroToken Model - Database Operations', function () {
 describe('XeroToken Model - Relationships', function () {
     it('has tenant relationship method defined', function () {
         $token = XeroToken::factory()->make();
-        
+
         expect(method_exists($token, 'tenant'))->toBeTrue();
     });
 
     it('can access protected table name correctly', function () {
         $token = XeroToken::factory()->make();
-        
+
         expect($token->getTable())->toBe('xero_tokens');
     });
 
     it('model has correct primary key', function () {
         $token = XeroToken::factory()->make();
-        
+
         expect($token->getKeyName())->toBe('id');
     });
 });
