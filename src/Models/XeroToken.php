@@ -66,7 +66,7 @@ class XeroToken extends Model
     public function tenant(): ?BelongsTo
     {
         $model = config('laravel-xero-oauth.multi_tenant_model');
-        
+
         if ($model) {
             return $this->belongsTo($model, 'tenant_id');
         }
