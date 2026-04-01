@@ -20,8 +20,8 @@ jobs:
             - name: Install Dependencies
               run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --optimize-autoloader
 
-            - name: Generate Application Key
-              run: php artisan key:generate
+            - name: Build Workbench
+              run: vendor/bin/testbench workbench:build
 
             - name: Run Tests
               run: vendor/bin/pest --parallel --ci
