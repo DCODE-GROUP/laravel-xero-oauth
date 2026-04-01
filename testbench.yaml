@@ -1,0 +1,41 @@
+laravel: "@testbench"
+
+providers:
+  - Dcodegroup\LaravelXeroOauth\LaravelXeroOAuthServiceProvider
+  - Workbench\App\Providers\WorkbenchServiceProvider
+
+migrations:
+  - workbench/database/migrations
+  - database/migrations
+
+seeders:
+  - Workbench\Database\Seeders\DatabaseSeeder
+
+workbench:
+  start: "/xero"
+  install: true
+  health: false
+  user: "user@example.com"
+  guard: "web"
+  discovers:
+    web: true
+    api: true
+    config: true
+    commands: true
+    components: false
+    factories: true
+    views: true
+  build:
+    - asset-publish
+    - create-sqlite-db
+    - db-wipe
+    - migrate-fresh
+  assets:
+    - laravel-assets
+  sync:
+    - from: storage
+      to: workbench/storage
+      reverse: true
+    - from: config
+      to: workbench/config
+      reverse: false

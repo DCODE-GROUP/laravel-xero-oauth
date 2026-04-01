@@ -31,11 +31,16 @@
         "xeroapi/xero-php-oauth2": "^11.0"
     },
     "require-dev": {
-        "laravel/pint": "^1.13.5"
+        "laravel/pint": "^1.13.5",
+        "orchestra/testbench": "^10.11",
+        "pestphp/pest": "^4.4",
+        "pestphp/pest-plugin-laravel": "^4.1"
     },
     "autoload": {
         "psr-4": {
-            "Dcodegroup\\LaravelXeroOauth\\": "src"
+            "Dcodegroup\\LaravelXeroOauth\\": "src",
+            "Dcodegroup\\LaravelXeroOauth\\Database\\": "database",
+            "Dcodegroup\\LaravelXeroOauth\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -57,7 +62,10 @@
         ]
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
     "extra": {
         "laravel": {
