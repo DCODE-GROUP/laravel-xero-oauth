@@ -3,7 +3,6 @@
 use Dcodegroup\LaravelXeroOauth\Http\Controllers\SwitchXeroTenantController;
 use Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroAuthController;
 use Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroCallbackController;
-use Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroCloseController;
 use Dcodegroup\LaravelXeroOauth\Http\Controllers\XeroController;
 
 return [
@@ -54,7 +53,6 @@ return [
         'auth' => XeroAuthController::class,
         'callback' => XeroCallbackController::class,
         'tenants' => SwitchXeroTenantController::class,
-        'close' => XeroCloseController::class,
     ],
 
     /*

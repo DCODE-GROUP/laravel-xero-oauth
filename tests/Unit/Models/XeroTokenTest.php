@@ -115,8 +115,6 @@ describe('XeroToken Model - Attributes', function () {
         $token = XeroToken::factory()->create();
         $originalUpdatedAt = $token->updated_at;
 
-        sleep(1); // Ensure time passes
-
         $token->update(['current_tenant_id' => 'new_tenant']);
 
         expect($token->updated_at)->not->toBe($originalUpdatedAt);

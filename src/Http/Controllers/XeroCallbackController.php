@@ -58,7 +58,7 @@ class XeroCallbackController extends Controller
         $sessionName = config('laravel-xero-oauth.callback_redirect_session_name');
 
         if (! empty($sessionName) && Session::has($sessionName)) {
-            $url = Session::get($sessionName);
+            $url = Session::get($sessionName) ?? $url;
         }
 
         return redirect()->to($url);

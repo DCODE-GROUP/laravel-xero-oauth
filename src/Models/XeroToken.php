@@ -2,6 +2,7 @@
 
 namespace Dcodegroup\LaravelXeroOauth\Models;
 
+use Dcodegroup\LaravelXeroOauth\Database\Factories\XeroTokenFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Validator;
 use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Token\AccessTokenInterface;
-use Workbench\Database\Factories\XeroTokenFactory;
 
 class XeroToken extends Model
 {
@@ -63,8 +63,14 @@ class XeroToken extends Model
         ])->fails();
     }
 
-    public function tenant(): BelongsTo
+    public function tenant(): ?BelongsTo
     {
-        return $this->belongsTo(config('laravel-xero-oauth.multi_tenant_model'), 'tenant_id');
+        $model = config('laravel-xero-oauth.multi_tenant_model');
+        
+        if ($model) {
+            return $this->belongsTo($model, 'tenant_id');
+        }
+
+        return null;
     }
 }

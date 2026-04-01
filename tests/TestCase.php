@@ -28,7 +28,10 @@ abstract class TestCase extends BaseTestCase
     protected function defineDatabaseMigrations()
     {
         // Load migrations from workbench
-        $this->loadMigrationsFrom(__DIR__.'/../workbench/database/migrations');
+        $this->loadMigrationsFrom([
+            __DIR__.'/../workbench/database/migrations',
+            __DIR__.'/../database/migrations',
+        ]);
     }
 
     protected function setUp(): void
