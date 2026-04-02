@@ -11,6 +11,10 @@ migrations:
 seeders:
   - Workbench\Database\Seeders\DatabaseSeeder
 
+factories:
+  - workbench/database/factories
+  - database/factories
+
 workbench:
   start: "/xero"
   install: true
