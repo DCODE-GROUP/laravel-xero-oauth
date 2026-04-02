@@ -1,7 +1,7 @@
 laravel: "@testbench"
 
 providers:
-  - Dcodegroup\LaravelXeroOauth\LaravelXeroOAuthServiceProvider
+  - Dcodegroup\LaravelXeroOauth\LaravelXeroOauthServiceProvider
   - Workbench\App\Providers\WorkbenchServiceProvider
 
 migrations:
