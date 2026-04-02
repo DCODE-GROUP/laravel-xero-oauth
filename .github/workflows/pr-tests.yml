@@ -21,9 +21,9 @@ jobs:
               run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --optimize-autoloader
 
             - name: Build Workbench
-              run: |
-                  vendor/bin/testbench workbench:build
-                  && vendor/bin/testbench workbench:sync-skeleton
+              run: vendor/bin/testbench workbench:build
+            - name: Sync Workbench Skeleton
+              run: vendor/bin/testbench workbench:sync-skeleton
 
             - name: Run Tests
               run: vendor/bin/pest --parallel --ci
