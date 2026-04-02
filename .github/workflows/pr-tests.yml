@@ -20,13 +20,7 @@ jobs:
             - name: Install Dependencies
               run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --optimize-autoloader
 
-            - name: Build Workbench
-              run: vendor/bin/testbench workbench:build
-
-            - name: Sync Workbench Skeleton
-              run: vendor/bin/testbench workbench:sync-skeleton
-
-            - name: Discover Workbench
+            - name: Discover Packages
               run: vendor/bin/testbench package:discover
 
             - name: Run Tests
