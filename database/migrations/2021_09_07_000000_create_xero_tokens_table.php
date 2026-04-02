@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateXeroTokensTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,6 +15,13 @@ class CreateXeroTokensTable extends Migration
     {
         Schema::create('xero_tokens', function (Blueprint $table) {
             $table->increments('id');
+
+            if (! empty(config('laravel-xero-oauth.multi_tenant_model'))) {
+                $table->foreignIdFor(config('laravel-xero-oauth.multi_tenant_model'), 'tenant_id')
+                    ->nullable()
+                    ->constrained();
+            }
+
             $table->text('id_token');
             $table->string('token_type')->nullable();
             $table->text('access_token');
@@ -35,4 +42,4 @@ class CreateXeroTokensTable extends Migration
     {
         Schema::dropIfExists('xero_tokens');
     }
-}
+};

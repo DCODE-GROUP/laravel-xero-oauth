@@ -2,9 +2,9 @@
 
 namespace Dcodegroup\LaravelXeroOauth\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Calcinai\OAuth2\Client\Provider\Xero;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Controller;
 
 class XeroAuthController extends Controller
 {

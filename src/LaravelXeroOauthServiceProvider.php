@@ -29,6 +29,15 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
         $this->registerResources();
         $this->registerCommands();
         $this->registerResponseHandler();
+
+        // Register Xero singleton after routes are loaded
+        $this->app->singleton(Xero::class, function () {
+            return new Xero([
+                'clientId' => config('laravel-xero-oauth.oauth.client_id'),
+                'clientSecret' => config('laravel-xero-oauth.oauth.client_secret'),
+                'redirectUri' => route(config('laravel-xero-oauth.path').'.callback'),
+            ]);
+        });
     }
 
     /**
@@ -37,14 +46,6 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/laravel-xero-oauth.php', 'laravel-xero-oauth');
-
-        $this->app->singleton(Xero::class, function () {
-            return new Xero([
-                'clientId' => config('laravel-xero-oauth.oauth.client_id'),
-                'clientSecret' => config('laravel-xero-oauth.oauth.client_secret'),
-                'redirectUri' => route(config('laravel-xero-oauth.path').'.callback'),
-            ]);
-        });
 
         $this->app->bind(Application::class, function () {
             $client = resolve(Xero::class);
@@ -103,7 +104,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
             $timestamp = date('Y_m_d_His', time());
 
             $this->publishes([
-                __DIR__.'/../database/migrations/create_xero_tokens_table.stub.php' => database_path('migrations/'.$timestamp.'_create_xero_tokens_table.php'),
+                __DIR__.'/../database/migrations/2021_09_07_000000_create_xero_tokens_table.php' => database_path('migrations/2021_09_07_000000_create_xero_tokens_table.php'),
             ], 'laravel-xero-oauth-migrations');
         }
 
@@ -124,6 +125,19 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
             'middleware' => config('laravel-xero-oauth.middleware', 'web'),
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/../routes/xero.php');
+        });
+
+        // Register callback route with excluded middleware
+        $middleware = config('laravel-xero-oauth.middleware', ['web']);
+        $excludeMiddleware = config('laravel-xero-oauth.exclude_middleware_for_callback', []);
+        $callbackMiddleware = array_values(array_diff($middleware, $excludeMiddleware));
+
+        Route::group([
+            'prefix' => config('laravel-xero-oauth.path'),
+            'as' => config('laravel-xero-oauth.path').'.',
+            'middleware' => $callbackMiddleware,
+        ], function () {
+            Route::get('/callback', config('laravel-xero-oauth.route_controllers.callback'))->name('callback');
         });
     }
 
