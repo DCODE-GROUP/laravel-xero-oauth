@@ -1,6 +1,6 @@
 <?php
 
-namespace Dcodegroup\LaravelXeroOauth\Database\Factories;
+namespace Dcodegroup\LaravelXeroOauth\Database\factories;
 
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Illuminate\Database\Eloquent\Factories\Factory;
