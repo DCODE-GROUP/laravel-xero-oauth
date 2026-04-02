@@ -40,6 +40,7 @@
         "psr-4": {
             "Dcodegroup\\LaravelXeroOauth\\": "src",
             "Dcodegroup\\LaravelXeroOauth\\Database\\": "database",
+            "Dcodegroup\\LaravelXeroOauth\\Database\\Factories\\": "database/factories",
             "Dcodegroup\\LaravelXeroOauth\\Tests\\": "tests"
         }
     },
