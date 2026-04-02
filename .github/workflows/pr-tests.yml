@@ -22,8 +22,12 @@ jobs:
 
             - name: Build Workbench
               run: vendor/bin/testbench workbench:build
+
             - name: Sync Workbench Skeleton
               run: vendor/bin/testbench workbench:sync-skeleton
 
+            - name: Discover Workbench
+              run: vendor/bin/testbench package:discover
+
             - name: Run Tests
-              run: vendor/bin/pest --parallel --ci
+              run: vendor/bin/testbench package:test --parallel --compact
