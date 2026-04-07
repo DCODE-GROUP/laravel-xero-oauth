@@ -51,7 +51,7 @@ it('refreshes and stores a new token when latest token is expired', function () 
     $this->mock(Xero::class, function (MockInterface $mock) use ($refreshedToken) {
         $mock->shouldReceive('getAccessToken')
             ->once()
-            ->with('refresh_token', \Mockery::on(fn (array $params) => isset($params['refresh_token']) && $params['refresh_token'] === 'expired_refresh'))
+            ->with('refresh_token', Mockery::on(fn (array $params) => isset($params['refresh_token']) && $params['refresh_token'] === 'expired_refresh'))
             ->andReturn($refreshedToken);
     });
 
@@ -82,4 +82,3 @@ it('throws unauthorized exception when refreshed token format is invalid', funct
 
     XeroTokenService::getToken();
 })->throws(UnauthorizedXero::class);
-

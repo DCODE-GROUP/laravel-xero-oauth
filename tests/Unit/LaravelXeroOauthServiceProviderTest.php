@@ -46,4 +46,3 @@ it('throws when no tenant can be resolved from token or xero tenants list', func
 
     app(Application::class);
 })->throws(XeroOrganisationExpired::class);
-

@@ -4,6 +4,7 @@ namespace Dcodegroup\LaravelXeroOauth\Http\Controllers;
 
 use Calcinai\OAuth2\Client\Provider\Xero;
 use Illuminate\Routing\Controller;
+use Inertia\Inertia;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,11 +27,11 @@ class XeroAuthController extends Controller
         ]);
 
         if (config('laravel-xero-oauth.frontend.driver') === 'inertia') {
-            if (! class_exists(\Inertia\Inertia::class)) {
+            if (! class_exists(Inertia::class)) {
                 throw new RuntimeException('Inertia frontend driver is configured but inertiajs/inertia-laravel is not installed.');
             }
 
-            return \Inertia\Inertia::location($authorizationUrl);
+            return Inertia::location($authorizationUrl);
         }
 
         return redirect()->to($authorizationUrl);

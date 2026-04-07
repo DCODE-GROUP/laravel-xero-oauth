@@ -7,6 +7,7 @@ use Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedXero;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Dcodegroup\LaravelXeroOauth\XeroTokenService;
 use Illuminate\Routing\Controller;
+use Inertia\Inertia;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use RuntimeException;
 
@@ -36,11 +37,11 @@ class XeroController extends Controller
         }
 
         if (config('laravel-xero-oauth.frontend.driver') === 'inertia') {
-            if (! class_exists(\Inertia\Inertia::class)) {
+            if (! class_exists(Inertia::class)) {
                 throw new RuntimeException('Inertia frontend driver is configured but inertiajs/inertia-laravel is not installed.');
             }
 
-            return \Inertia\Inertia::render(config('laravel-xero-oauth.frontend.inertia.component'), [
+            return Inertia::render(config('laravel-xero-oauth.frontend.inertia.component'), [
                 'token' => $latestToken,
                 'tenants' => $tenants,
                 'currentTenantId' => $latestToken->current_tenant_id ?? null,

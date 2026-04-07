@@ -87,4 +87,3 @@ namespace {
         expect(XeroToken::count())->toBe(1);
     });
 }
-

@@ -106,4 +106,3 @@ it('returns exception object when save model fails', function () {
     expect($result)->toBeInstanceOf(Exception::class);
     expect($result->getMessage())->toBe('save failed');
 });
-

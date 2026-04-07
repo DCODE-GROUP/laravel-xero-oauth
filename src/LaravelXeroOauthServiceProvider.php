@@ -126,8 +126,6 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
 
     /**
      * Listen to the RequestHandled event to prepare the Response.
-     *
-     * @return void
      */
     private function registerResponseHandler(): void
     {

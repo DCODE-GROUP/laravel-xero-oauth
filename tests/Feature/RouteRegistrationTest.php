@@ -15,4 +15,3 @@ it('allows guests to hit callback while index is still auth-protected', function
     // Callback should bypass auth middleware and reach controller logic.
     $this->get('/xero/callback')->assertServerError();
 });
-

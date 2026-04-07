@@ -8,6 +8,7 @@ use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,11 +64,11 @@ class XeroCallbackController extends Controller
         }
 
         if (config('laravel-xero-oauth.frontend.driver') === 'inertia') {
-            if (! class_exists(\Inertia\Inertia::class)) {
+            if (! class_exists(Inertia::class)) {
                 throw new RuntimeException('Inertia frontend driver is configured but inertiajs/inertia-laravel is not installed.');
             }
 
-            return \Inertia\Inertia::location($url);
+            return Inertia::location($url);
         }
 
         return redirect()->to($url);
