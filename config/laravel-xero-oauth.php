@@ -9,7 +9,23 @@ return [
     'oauth' => [
         'client_id' => env('XERO_CLIENT_ID', ''),
         'client_secret' => env('XERO_CLIENT_SECRET', ''),
-        'scopes' => env('XERO_SCOPE', 'openid profile email offline_access accounting.settings accounting.banktransactions accounting.payments accounting.invoices accounting.invoices accounting.attachments accounting.contacts payroll.employees payroll.payruns payroll.timesheets payroll.settings'),
+        'scopes' => env('XERO_SCOPE', implode(' ', [
+            'openid',
+            'profile',
+            'email',
+            'offline_access',
+            'accounting.settings',
+            'accounting.banktransactions',
+            'accounting.payments',
+            'accounting.invoices',
+            'accounting.manualjournals',
+            'accounting.attachments',
+            'accounting.contacts',
+            'payroll.employees',
+            'payroll.payruns',
+            'payroll.timesheets',
+            'payroll.settings',
+        ])),
     ],
 
     /*
