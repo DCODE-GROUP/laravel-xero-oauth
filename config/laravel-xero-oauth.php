@@ -107,6 +107,25 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Laravel Xero oAuth Frontend Driver
+    |--------------------------------------------------------------------------
+    |
+    | Choose how package responses are rendered.
+    | - blade: uses package Blade views and normal redirects.
+    | - inertia: uses Inertia component responses and Inertia location redirects.
+    |
+    */
+
+    'frontend' => [
+        'driver' => env('LARAVEL_XERO_FRONTEND_DRIVER', 'blade'),
+
+        'inertia' => [
+            'component' => env('LARAVEL_XERO_INERTIA_COMPONENT', 'Xero/OAuth/Index'),
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Laravel Xero oAuth Multi Tenanted Support
     |--------------------------------------------------------------------------
     |
