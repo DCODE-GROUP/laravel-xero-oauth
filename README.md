@@ -119,6 +119,20 @@ Expected props from the package index controller:
 
 This example assumes Ziggy is installed and your route names are exposed to the client.
 
+### Screenshots
+
+Blade (disconnected):
+
+![Blade disconnected](docs/screenshots/blade-disconnected.png)
+
+Blade (connected):
+
+![Blade connected](docs/screenshots/blade-connected.png)
+
+Inertia contract example:
+
+![Inertia contract](docs/screenshots/inertia-contract.png)
+
 If you want to have the oauth screens appear within your sites layout ensure to configure the environment variable. eg.
 
 `LARAVEL_XERO_OAUTH_APP_LAYOUT=layouts.admin`
