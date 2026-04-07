@@ -32,6 +32,93 @@ php artsian migrate
 
 Most of configuration has been set the fair defaults. However you can review the configuration file at `config/laravel-xero-oauth.php` and adjust as needed
 
+If you are using Inertia, you can switch the package frontend driver from Blade to Inertia:
+
+```php
+'frontend' => [
+    'driver' => 'inertia',
+    'inertia' => [
+        'component' => 'Xero/OAuth/Index',
+    ],
+],
+```
+
+When `frontend.driver` is `inertia`, the package will:
+
+- Render the index endpoint with your Inertia component
+- Use Inertia location redirects for `/xero/auth` and `/xero/callback`
+
+### Inertia Vue page contract (drop-in example)
+
+Set your component path to match the config default:
+
+```php
+'frontend' => [
+    'driver' => 'inertia',
+    'inertia' => [
+        'component' => 'Xero/OAuth/Index',
+    ],
+],
+```
+
+Create `resources/js/Pages/Xero/OAuth/Index.vue`:
+
+```vue
+<script setup>
+import { router } from '@inertiajs/vue3';
+import { route } from 'ziggy-js';
+
+const props = defineProps({
+  token: { type: Object, default: null },
+  tenants: { type: Array, default: () => [] },
+  currentTenantId: { type: String, default: null },
+  authUrl: { type: String, required: true },
+});
+
+const connectToXero = () => {
+  // Package returns an Inertia location response from /xero/auth
+  window.location.href = props.authUrl;
+};
+
+const selectTenant = (tenantId) => {
+  router.post(route('xero.tenant.update', { tenantId }));
+};
+</script>
+
+<template>
+  <section>
+    <h1>Xero OAuth</h1>
+
+    <button type="button" @click="connectToXero">Connect to Xero</button>
+
+    <p v-if="token">Connected</p>
+    <p v-else>Not connected</p>
+
+    <ul v-if="tenants.length">
+      <li v-for="tenant in tenants" :key="tenant.tenantId">
+        <span>{{ tenant.tenantName }}</span>
+        <button
+          type="button"
+          :disabled="tenant.tenantId === currentTenantId"
+          @click="selectTenant(tenant.tenantId)"
+        >
+          {{ tenant.tenantId === currentTenantId ? 'Current' : 'Use this tenant' }}
+        </button>
+      </li>
+    </ul>
+  </section>
+</template>
+```
+
+Expected props from the package index controller:
+
+- `token`: latest stored token or `null`
+- `tenants`: array of Xero tenants (`tenantId`, `tenantName`, `tenantType`, etc.)
+- `currentTenantId`: currently selected tenant id or `null`
+- `authUrl`: URL to start OAuth (`xero.auth`)
+
+This example assumes Ziggy is installed and your route names are exposed to the client.
+
 If you want to have the oauth screens appear within your sites layout ensure to configure the environment variable. eg.
 
 `LARAVEL_XERO_OAUTH_APP_LAYOUT=layouts.admin`
