@@ -339,12 +339,10 @@ describe('POST /xero/tenants/{tenantId} - Switch Tenant Route', function () {
         $response->assertRedirect('/previous-page');
     });
 
-    it('handles null latest token gracefully', function () {
+    it('returns not found when no latest token exists', function () {
         $user = createTestUser();
         $tenantId = Str::uuid();
 
-        // No token created, so latestToken() will return null
-        // This reveals a bug in the controller - it should handle this case
-        $this->actingAs($user)->post("/xero/tenants/{$tenantId}/")->assertServerError();
+        $this->actingAs($user)->post("/xero/tenants/{$tenantId}/")->assertNotFound();
     });
 });
