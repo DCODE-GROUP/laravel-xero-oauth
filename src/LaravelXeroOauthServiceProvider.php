@@ -134,7 +134,8 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
                 (($event->response->headers->has('Content-Type') && strpos($event->response->headers->get('Content-Type'), 'html') !== false)
                     || $event->request->getRequestFormat() == 'html'
                     || stripos($event->response->headers->get('Content-Disposition') ?? '', 'attachment;') === false) &&
-                ($route = $event->request->route()) && Str::startsWith($route->getName(), config('laravel-xero-oauth.path').'.')) {
+                /** @phpstan-ignore-next-line method.nonObject */
+                Str::startsWith($event->request->route()?->getName() ?? '', config('laravel-xero-oauth.path').'.')) {
                 $content = $event->response->getContent();
 
                 $head = View::make('xero-oauth-views::head')->render();
