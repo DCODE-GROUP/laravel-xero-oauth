@@ -8,8 +8,6 @@ use League\OAuth2\Client\Token\AccessToken;
 use Mockery\MockInterface;
 use Workbench\App\Models\User;
 
-use function Pest\Laravel\actingAs;
-
 // Helper function to create a test user
 function createTestUser()
 {
@@ -30,7 +28,7 @@ describe('GET /xero - Index Route', function () {
     it('displays the index view when authenticated without a token', function () {
         $user = createTestUser();
 
-        $response = actingAs($user)->get('/xero');
+        $response = $this->actingAs($user)->get('/xero');
 
         $response->assertStatus(200);
         $response->assertViewIs('xero-oauth-views::index');

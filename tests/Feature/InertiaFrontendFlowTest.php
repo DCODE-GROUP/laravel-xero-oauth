@@ -26,8 +26,6 @@ namespace {
     use Mockery\MockInterface;
     use Workbench\App\Models\User;
 
-    use function Pest\Laravel\actingAs;
-
     function createInertiaFlowUser(): User
     {
         return User::create([
@@ -44,7 +42,7 @@ namespace {
     it('renders inertia component for xero index when inertia driver is enabled', function () {
         $user = createInertiaFlowUser();
 
-        $response = actingAs($user)->get('/xero');
+        $response = $this->actingAs($user)->get('/xero');
 
         $response->assertOk();
         $response->assertHeader('X-Inertia-Stub', 'render');
@@ -60,7 +58,7 @@ namespace {
             $mock->shouldReceive('getAuthorizationUrl')->once()->andReturn($authorizationUrl);
         });
 
-        $response = actingAs($user)->get('/xero/auth');
+        $response = $this->actingAs($user)->get('/xero/auth');
 
         $response->assertRedirect($authorizationUrl);
         $response->assertHeader('X-Inertia-Stub', 'location');
