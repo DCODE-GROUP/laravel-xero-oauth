@@ -11,16 +11,25 @@ jobs:
             matrix:
                 php: [8.3, 8.4, 8.5]
                 laravel: ['10.*', '11.*', '12.*', '13.*']
-                stability: [prefer-lowest, prefer-stable]
+                stability: [prefer-stable]
+#                stability: [prefer-lowest, prefer-stable]
                 include:
                     - laravel: '10.*'
                       testbench: '8.*'
+                      pest: '^3.8'
+                      pest_plugin_laravel: '^3.2'
                     - laravel: '11.*'
                       testbench: '9.*'
+                      pest: '^4.4'
+                      pest_plugin_laravel: '^4.1'
                     - laravel: '12.*'
                       testbench: '10.*'
+                      pest: '^4.4'
+                      pest_plugin_laravel: '^4.1'
                     - laravel: '13.*'
                       testbench: '11.*'
+                      pest: '^4.4'
+                      pest_plugin_laravel: '^4.1'
 
         name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }}
 
@@ -42,7 +51,8 @@ jobs:
 
             - name: Install dependencies
               run: |
-                  composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+                  composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+                  composer require --dev "orchestra/testbench:${{ matrix.testbench }}" "pestphp/pest:${{ matrix.pest }}" "pestphp/pest-plugin-laravel:${{ matrix.pest_plugin_laravel }}" --no-interaction --no-update
                   composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
             - name: List installed dependencies
