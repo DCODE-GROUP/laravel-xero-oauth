@@ -1,0 +1,13 @@
+parameters:
+    level: 5
+    paths:
+        - src
+    ignoreErrors:
+        - '#Call to an undefined (static )?method Dcodegroup\\LaravelXeroOauth\\Models\\XeroToken::(create|latest)#'
+        - '#Access to an undefined property Dcodegroup\\LaravelXeroOauth\\Models\\XeroToken::\$current_tenant_id#'
+        - '#Negated boolean expression is always false#'
+        - '#Using nullsafe method call on non-nullable type#'
+        - '#Instanceof between .* will always evaluate to true#'
+        - '#PHPDoc type array of property .* is not covariant#'
+    reportUnmatchedIgnoredErrors: false
+
