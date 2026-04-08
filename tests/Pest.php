@@ -14,9 +14,15 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 |
 */
 
-pest()->extend(TestCase::class)
-    ->use(RefreshDatabase::class)
-    ->in('Feature', 'Unit');
+if (function_exists('pest')) {
+    // Pest v3+
+    pest()->extend(TestCase::class)
+        ->use(RefreshDatabase::class)
+        ->in('Feature', 'Unit');
+} else {
+    // Pest v2
+    uses(TestCase::class, RefreshDatabase::class)->in('Feature', 'Unit');
+}
 
 /*
 |--------------------------------------------------------------------------
