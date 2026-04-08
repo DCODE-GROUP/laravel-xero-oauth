@@ -22,7 +22,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
     /**
      * Bootstrap the application events.
      */
-    public function boot()
+    public function boot(): void
     {
         $this->offerPublishing();
         $this->registerRoutes();
@@ -43,7 +43,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/laravel-xero-oauth.php', 'laravel-xero-oauth');
 
@@ -71,7 +71,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
 
             if (is_null($latest->current_tenant_id)) {
                 $tenant = head($client->getTenants($token));
-                $tenantId = $tenant->tenantId;
+                $tenantId = $tenant->tenantId ?? null;
             }
 
             if (! $tenantId) {
@@ -86,7 +86,7 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
         });
     }
 
-    protected function registerCommands()
+    protected function registerCommands(): void
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -98,26 +98,22 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
     /**
      * Setup the resource publishing groups for Dcodegroup Xero oAuth.
      */
-    protected function offerPublishing()
+    protected function offerPublishing(): void
     {
-        if (! class_exists('CreateXeroTokensTable')) {
-            $timestamp = date('Y_m_d_His', time());
-
-            $this->publishes([
-                __DIR__.'/../database/migrations/2021_09_07_000000_create_xero_tokens_table.php' => database_path('migrations/2021_09_07_000000_create_xero_tokens_table.php'),
-            ], 'laravel-xero-oauth-migrations');
-        }
+        $this->publishes([
+            __DIR__.'/../database/migrations/2021_09_07_000000_create_xero_tokens_table.php' => database_path('migrations/2021_09_07_000000_create_xero_tokens_table.php'),
+        ], 'laravel-xero-oauth-migrations');
 
         $this->publishes([__DIR__.'/../config/laravel-xero-oauth.php' => config_path('laravel-xero-oauth.php')], 'laravel-xero-oauth-config');
     }
 
-    protected function registerResources()
+    protected function registerResources(): void
     {
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'xero-oauth-translations');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'xero-oauth-views');
     }
 
-    protected function registerRoutes()
+    protected function registerRoutes(): void
     {
         Route::group([
             'prefix' => config('laravel-xero-oauth.path'),
@@ -126,34 +122,20 @@ class LaravelXeroOauthServiceProvider extends ServiceProvider
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/../routes/xero.php');
         });
-
-        // Register callback route with excluded middleware
-        $middleware = config('laravel-xero-oauth.middleware', ['web']);
-        $excludeMiddleware = config('laravel-xero-oauth.exclude_middleware_for_callback', []);
-        $callbackMiddleware = array_values(array_diff($middleware, $excludeMiddleware));
-
-        Route::group([
-            'prefix' => config('laravel-xero-oauth.path'),
-            'as' => config('laravel-xero-oauth.path').'.',
-            'middleware' => $callbackMiddleware,
-        ], function () {
-            Route::get('/callback', config('laravel-xero-oauth.route_controllers.callback'))->name('callback');
-        });
     }
 
     /**
      * Listen to the RequestHandled event to prepare the Response.
-     *
-     * @return void
      */
-    private function registerResponseHandler()
+    private function registerResponseHandler(): void
     {
         Event::listen(RequestHandled::class, function (RequestHandled $event) {
             if (! $event->request->ajax() &&
-                (($event->response->headers->has('Content-Type') && strpos($event->response->headers->get('Content-Type'), 'html') === true)
+                (($event->response->headers->has('Content-Type') && strpos($event->response->headers->get('Content-Type'), 'html') !== false)
                     || $event->request->getRequestFormat() == 'html'
-                    || stripos($event->response->headers->get('Content-Disposition'), 'attachment;') === false) &&
-                Str::startsWith($event->request->route()?->getName(), config('laravel-xero-oauth.path').'.')) {
+                    || stripos($event->response->headers->get('Content-Disposition') ?? '', 'attachment;') === false) &&
+                /** @phpstan-ignore-next-line method.nonObject */
+                Str::startsWith($event->request->route()?->getName() ?? '', config('laravel-xero-oauth.path').'.')) {
                 $content = $event->response->getContent();
 
                 $head = View::make('xero-oauth-views::head')->render();
