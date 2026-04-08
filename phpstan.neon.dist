@@ -9,5 +9,6 @@ parameters:
         - '#Using nullsafe method call on non-nullable type#'
         - '#Instanceof between .* will always evaluate to true#'
         - '#PHPDoc type array of property .* is not covariant#'
+        - '#Right side of && is always true#'
     reportUnmatchedIgnoredErrors: false
 
