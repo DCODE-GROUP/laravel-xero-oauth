@@ -1,0 +1,61 @@
+name: run-tests
+
+on: [push, pull_request]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: true
+            matrix:
+                php: [8.3, 8.4, 8.5]
+                laravel: ['10.*', '11.*', '12.*', '13.*']
+                stability: [prefer-stable]
+                exclude:
+                    - php: 8.5
+                      laravel: '10.*'
+#                stability: [prefer-lowest, prefer-stable]
+                include:
+                    - laravel: '10.*'
+                      testbench: '8.*'
+                      pest: '^2.36'
+                    - laravel: '11.*'
+                      testbench: '9.*'
+                      pest: '^4.4'
+                    - laravel: '12.*'
+                      testbench: '10.*'
+                      pest: '^4.4'
+                    - laravel: '13.*'
+                      testbench: '11.*'
+                      pest: '^4.4'
+
+        name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }}
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v5
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+                  coverage: none
+
+            - name: Setup problem matchers
+              run: |
+                  echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+                  echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+            - name: Install dependencies
+              run: |
+                  composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+                  composer require --dev "orchestra/testbench:${{ matrix.testbench }}" "pestphp/pest:${{ matrix.pest }}" --no-interaction --no-update
+                  composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+
+            - name: List installed dependencies
+              run: composer show -D
+
+            - name: Execute tests
+              run: vendor/bin/pest

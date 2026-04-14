@@ -5,11 +5,13 @@ namespace Dcodegroup\LaravelXeroOauth\Http\Controllers;
 use Calcinai\OAuth2\Client\Provider\Xero;
 use Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedXero;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+use RuntimeException;
+use Symfony\Component\HttpFoundation\Response;
 
 class XeroCallbackController extends Controller
 {
@@ -27,7 +29,7 @@ class XeroCallbackController extends Controller
      * @throws IdentityProviderException
      * @throws UnauthorizedXero
      */
-    public function __invoke(Request $request): RedirectResponse
+    public function __invoke(Request $request): Response
     {
         if (! $request->filled('code')) {
             throw new UnauthorizedXero('Could not authorize Xero!');
@@ -54,11 +56,19 @@ class XeroCallbackController extends Controller
 
         XeroToken::create($data);
 
-        $url = route('xero.index');
+        $url = route(config('laravel-xero-oauth.path').'.index');
         $sessionName = config('laravel-xero-oauth.callback_redirect_session_name');
 
         if (! empty($sessionName) && Session::has($sessionName)) {
             $url = Session::get($sessionName) ?? $url;
+        }
+
+        if (config('laravel-xero-oauth.frontend.driver') === 'inertia') {
+            if (! class_exists(Inertia::class)) {
+                throw new RuntimeException('Inertia frontend driver is configured but inertiajs/inertia-laravel is not installed.');
+            }
+
+            return Inertia::location($url);
         }
 
         return redirect()->to($url);

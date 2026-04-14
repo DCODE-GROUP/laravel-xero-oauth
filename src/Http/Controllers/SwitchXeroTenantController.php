@@ -10,7 +10,13 @@ class SwitchXeroTenantController extends Controller
 {
     public function __invoke(string $tenantId): RedirectResponse
     {
-        XeroToken::latestToken()->update(['current_tenant_id' => $tenantId]);
+        $token = XeroToken::latestToken();
+
+        if (! $token) {
+            abort(404);
+        }
+
+        $token->update(['current_tenant_id' => $tenantId]);
 
         return redirect()->back();
     }

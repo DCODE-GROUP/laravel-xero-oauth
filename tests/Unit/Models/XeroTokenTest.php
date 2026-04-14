@@ -5,9 +5,6 @@ namespace Dcodegroup\LaravelXeroOauth\Tests\Unit\Models;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use League\OAuth2\Client\Token\AccessToken;
 
-use function Pest\Laravel\assertDatabaseCount;
-use function Pest\Laravel\assertDatabaseHas;
-
 // ==================== CRUD Tests ====================
 
 describe('XeroToken Model - CRUD Operations', function () {
@@ -49,7 +46,7 @@ describe('XeroToken Model - CRUD Operations', function () {
         ]);
 
         expect($token->current_tenant_id)->toBe('updated_tenant');
-        assertDatabaseHas('xero_tokens', [
+        $this->assertDatabaseHas('xero_tokens', [
             'id' => $token->id,
             'current_tenant_id' => 'updated_tenant',
         ]);
@@ -305,8 +302,8 @@ describe('XeroToken Model - Database Operations', function () {
     it('correctly persists to xero_tokens table', function () {
         $token = XeroToken::factory()->create();
 
-        assertDatabaseCount('xero_tokens', 1);
-        assertDatabaseHas('xero_tokens', [
+        $this->assertDatabaseCount('xero_tokens', 1);
+        $this->assertDatabaseHas('xero_tokens', [
             'id' => $token->id,
             'access_token' => $token->access_token,
         ]);

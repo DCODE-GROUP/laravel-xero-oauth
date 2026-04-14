@@ -6,11 +6,10 @@ use Calcinai\OAuth2\Client\Provider\Xero;
 use Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedXero;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Dcodegroup\LaravelXeroOauth\XeroTokenService;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Routing\Controller;
+use Inertia\Inertia;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+use RuntimeException;
 
 class XeroController extends Controller
 {
@@ -25,8 +24,6 @@ class XeroController extends Controller
     }
 
     /**
-     * @return Application|Factory|View
-     *
      * @throws UnauthorizedXero
      * @throws IdentityProviderException
      */
@@ -37,6 +34,19 @@ class XeroController extends Controller
         $latestToken = XeroToken::latestToken();
         if ($token) {
             $tenants = $this->xeroClient->getTenants($token);
+        }
+
+        if (config('laravel-xero-oauth.frontend.driver') === 'inertia') {
+            if (! class_exists(Inertia::class)) {
+                throw new RuntimeException('Inertia frontend driver is configured but inertiajs/inertia-laravel is not installed.');
+            }
+
+            return Inertia::render(config('laravel-xero-oauth.frontend.inertia.component'), [
+                'token' => $latestToken,
+                'tenants' => $tenants,
+                'currentTenantId' => $latestToken->current_tenant_id ?? null,
+                'authUrl' => route(config('laravel-xero-oauth.path').'.auth'),
+            ]);
         }
 
         return view('xero-oauth-views::index', [
