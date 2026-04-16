@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('token_type')->nullable();
             $table->text('access_token');
             $table->text('refresh_token')->nullable();
-            $table->string('scope')->nullable();
+            $table->text('scope')->nullable();
             $table->string('current_tenant_id')->nullable();
             $table->integer('expires')->nullable();
             $table->timestamps();

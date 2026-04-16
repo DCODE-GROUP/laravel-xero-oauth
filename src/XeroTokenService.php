@@ -15,15 +15,13 @@ class XeroTokenService
      *
      * @throws UnauthorizedXero
      */
-    public static function getToken()
+    public static function getToken(?XeroToken $token = null)
     {
-        if (! Schema::hasTable((new XeroToken)->getTable())) {
-            return null;
+        if (empty($token)) {
+            $token = self::getTokenModel();
         }
 
-        $token = XeroToken::latestToken();
-
-        if (! $token) {
+        if (empty($token)) {
             return null;
         }
 
@@ -45,10 +43,25 @@ class XeroTokenService
     /**
      * @return mixed
      */
-    private static function getAccessTokenFromXero(AccessToken $token)
+    public static function getAccessTokenFromXero(AccessToken $token)
     {
         return resolve(Xero::class)->getAccessToken('refresh_token', [
             'refresh_token' => $token->getRefreshToken(),
         ]);
+    }
+
+    public static function getTokenModel()
+    {
+        if (! Schema::hasTable((new XeroToken)->getTable())) {
+            return null;
+        }
+
+        $token = XeroToken::latestToken();
+
+        if (! $token) {
+            return null;
+        }
+
+        return $token;
     }
 }
