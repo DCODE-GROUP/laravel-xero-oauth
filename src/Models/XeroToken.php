@@ -76,8 +76,8 @@ class XeroToken extends Model
 
     // Add a global scope to ensure we only retrieve tokens for the authenticated tenant
     protected static function booted()
-    {   
-        if (config('laravel-xero-oauth.multi_tenant_model')) {    
+    {
+        if (config('laravel-xero-oauth.multi_tenant_model')) {
             static::addGlobalScope('tenant', function ($builder) {
                 $tenantSessionName = config('laravel-xero-oauth.current_app_tenant_session_name');
                 if ($tenantSessionName) {
