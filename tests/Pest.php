@@ -1,5 +1,6 @@
 <?php
 
+use Dcodegroup\LaravelXeroOauth\Tests\TenantTestCase;
 use Dcodegroup\LaravelXeroOauth\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -23,6 +24,17 @@ if (function_exists('pest')) {
     // Pest v2
     uses(TestCase::class, RefreshDatabase::class)->in('Feature', 'Unit');
 }
+
+if (function_exists('pest')) {
+    // Pest v3+
+    pest()->extend(TenantTestCase::class)
+        ->use(RefreshDatabase::class)
+        ->in('Tenancy');
+} else {
+    // Pest v2
+    uses(TenantTestCase::class, RefreshDatabase::class)->in('Tenancy');
+}
+
 
 /*
 |--------------------------------------------------------------------------
