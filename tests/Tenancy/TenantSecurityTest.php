@@ -37,7 +37,7 @@ it('can only query tokens for the authenticated tenant', function () {
     XeroToken::factory()->create([
         'tenant_id' => $tenantId1,
         'access_token' => 'token_for_tenant_123',
-    ]); 
+    ]);
 
     XeroToken::factory()->create([
         'tenant_id' => $tenantId2,
@@ -49,5 +49,5 @@ it('can only query tokens for the authenticated tenant', function () {
     $tokens = XeroToken::all();
     // Assert that we only retrieve the token for tenantId1.
     expect($tokens)->toHaveCount(1);
-    expect($tokens->first()->tenant_id)->toBe($tenantId1);    
+    expect($tokens->first()->tenant_id)->toBe($tenantId1);
 });
