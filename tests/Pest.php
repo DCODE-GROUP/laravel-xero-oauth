@@ -35,7 +35,6 @@ if (function_exists('pest')) {
     uses(TenantTestCase::class, RefreshDatabase::class)->in('Tenancy');
 }
 
-
 /*
 |--------------------------------------------------------------------------
 | Expectations
