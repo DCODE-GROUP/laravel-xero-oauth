@@ -33,7 +33,7 @@ describe('Tenant Security', function () {
     });
 
     it('can only query tokens for the authenticated tenant', function () {
-            // Simulate authentication for tenantId1.
+        // Simulate authentication for tenantId1.
         session(['teamID' => $this->tenantId1]);
         $tokens = XeroToken::all();
         // Assert that we only retrieve the token for tenantId1.
