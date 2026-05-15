@@ -1,6 +1,7 @@
 <?php
 
 use Calcinai\OAuth2\Client\Provider\Xero;
+use Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedTenancyXeroException;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -270,7 +271,7 @@ describe('GET /xero/callback - OAuth Callback Route', function () {
         expect(XeroToken::count())->toBe(1);
         // tenant_id should be null since no session is set
         expect(XeroToken::latest()->first()->tenant_id)->toBeNull();
-    });
+    })->throws(UnauthorizedTenancyXeroException::class, 'No tenant session name configured');
 
     it('does not break when session variables are not configured', function () {
         $accessToken = new AccessToken([
