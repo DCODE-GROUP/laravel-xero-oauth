@@ -3,7 +3,6 @@
 namespace Dcodegroup\LaravelXeroOauth\Models;
 
 use Dcodegroup\LaravelXeroOauth\Database\Factories\XeroTokenFactory;
-use Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedTenancyXeroException;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
