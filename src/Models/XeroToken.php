@@ -83,12 +83,12 @@ class XeroToken extends Model
                 $tenantSessionName = config('laravel-xero-oauth.current_app_tenant_session_name');
 
                 if (empty($tenantSessionName)) {
-                    throw new UnauthorizedTenancyXeroException('No tenant session name configured');
+                    return null;
                 }
 
                 $tenantId = session($tenantSessionName);
                 if (empty($tenantId)) {
-                    throw new UnauthorizedTenancyXeroException('No tenant authenticated');
+                    return null;
                 }
 
                 $builder->where('tenant_id', $tenantId);
