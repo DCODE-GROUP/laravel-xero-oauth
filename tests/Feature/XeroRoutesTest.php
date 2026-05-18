@@ -1,13 +1,16 @@
 <?php
 
 use Calcinai\OAuth2\Client\Provider\Xero;
-use Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedTenancyXeroException;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use League\OAuth2\Client\Token\AccessToken;
 use Mockery\MockInterface;
 use Workbench\App\Models\User;
+
+use function Pest\Laravel\actingAs;
+use function Pest\Laravel\get;
+use function Pest\Laravel\mock;
+use function Pest\Laravel\post;
 
 // Helper function to create a test user
 function createTestUser()
@@ -21,21 +24,21 @@ function createTestUser()
 
 describe('GET /xero - Index Route', function () {
     it('redirects to login if user is not authenticated', function () {
-        $response = $this->get('/xero');
-
-        $response->assertRedirect('/login');
+        get('/xero')
+            ->assertRedirect('/login');
     });
 
     it('displays the index view when authenticated without a token', function () {
         $user = createTestUser();
 
-        $response = $this->actingAs($user)->get('/xero');
+        actingAs($user);
 
-        $response->assertStatus(200);
-        $response->assertViewIs('xero-oauth-views::index');
-        $response->assertViewHas(['token', 'tenants', 'currentTenantId']);
-        $response->assertViewHas('token', null);
-        $response->assertViewHas('tenants', []);
+        get('/xero')
+            ->assertStatus(200)
+            ->assertViewIs('xero-oauth-views::index')
+            ->assertViewHas(['token', 'tenants', 'currentTenantId'])
+            ->assertViewHas('token', null)
+            ->assertViewHas('tenants', []);
     });
 
     it('displays the index view with token and tenants when authenticated with a token', function () {
@@ -49,17 +52,17 @@ describe('GET /xero - Index Route', function () {
             (object) ['tenantId' => 'tenant_456', 'tenantType' => 'ORGANISATION', 'tenantName' => 'Test Org 2'],
         ];
 
-        $this->mock(Xero::class, function (MockInterface $mock) use ($tenants) {
+        mock(Xero::class, function (MockInterface $mock) use ($tenants) {
             $mock->shouldReceive('getTenants')->andReturn($tenants);
         });
 
-        $response = $this->actingAs($user)->get('/xero');
-
-        $response->assertStatus(200);
-        $response->assertViewIs('xero-oauth-views::index');
-        $response->assertViewHas(['token', 'tenants', 'currentTenantId']);
-        $response->assertViewHas('token', $xeroToken);
-        $response->assertViewHas('tenants', $tenants);
+        actingAs($user);
+        get('/xero')
+            ->assertStatus(200)
+            ->assertViewIs('xero-oauth-views::index')
+            ->assertViewHas(['token', 'tenants', 'currentTenantId'])
+            ->assertViewHas('token', $xeroToken)
+            ->assertViewHas('tenants', $tenants);
     });
 
     it('displays the index view with current_tenant_id when token has a current_tenant_id', function () {
@@ -73,56 +76,58 @@ describe('GET /xero - Index Route', function () {
             (object) ['tenantId' => $tenantId, 'tenantType' => 'ORGANISATION', 'tenantName' => 'Active Org'],
         ];
 
-        $this->mock(Xero::class, function (MockInterface $mock) use ($tenants) {
+        mock(Xero::class, function (MockInterface $mock) use ($tenants) {
             $mock->shouldReceive('getTenants')->andReturn($tenants);
         });
 
-        $response = $this->actingAs($user)->get('/xero');
+        actingAs($user);
 
-        $response->assertStatus(200);
-        $response->assertViewHas('currentTenantId', $tenantId);
+        get('/xero')
+            ->assertStatus(200)
+            ->assertViewHas('currentTenantId', $tenantId);
     });
 
     it('returns empty tenants array when getTenants returns empty', function () {
         $user = createTestUser();
         XeroToken::factory()->create();
 
-        $this->mock(Xero::class, function (MockInterface $mock) {
+        mock(Xero::class, function (MockInterface $mock) {
             $mock->shouldReceive('getTenants')->andReturn([]);
         });
 
-        $response = $this->actingAs($user)->get('/xero');
+        actingAs($user);
 
-        $response->assertStatus(200);
-        $response->assertViewHas('tenants', []);
+        get('/xero')
+            ->assertStatus(200)
+            ->assertViewHas('tenants', []);
     });
 
     it('does not call getTenants when no token exists', function () {
         $user = createTestUser();
 
-        $this->mock(Xero::class, function (MockInterface $mock) {
+        mock(Xero::class, function (MockInterface $mock) {
             $mock->shouldNotReceive('getTenants');
         });
 
-        $response = $this->actingAs($user)->get('/xero');
+        actingAs($user);
 
-        $response->assertStatus(200);
-        $response->assertViewHas('tenants', []);
+        get('/xero')
+            ->assertStatus(200)
+            ->assertViewHas('tenants', []);
     });
 });
 
 describe('GET /xero/auth - Authorization Route', function () {
     it('redirects to login if user is not authenticated', function () {
-        $response = $this->get('/xero/auth');
-
-        $response->assertRedirect('/login');
+        get('/xero/auth')
+            ->assertRedirect('/login');
     });
 
     it('redirects to Xero authorization URL when authenticated', function () {
         $user = createTestUser();
         $authorizationUrl = 'https://login.xero.com/identity/connect/authorize';
 
-        $this->mock(Xero::class, function (MockInterface $mock) use ($authorizationUrl) {
+        mock(Xero::class, function (MockInterface $mock) use ($authorizationUrl) {
             $mock->shouldReceive('getAuthorizationUrl')
                 ->with(Mockery::on(function ($param) {
                     return isset($param['scope']);
@@ -130,9 +135,10 @@ describe('GET /xero/auth - Authorization Route', function () {
                 ->andReturn($authorizationUrl);
         });
 
-        $response = $this->actingAs($user)->get('/xero/auth');
+        actingAs($user);
 
-        $response->assertRedirect($authorizationUrl);
+        get('/xero/auth')
+            ->assertRedirect($authorizationUrl);
     });
 
     it('passes scope array from configuration to authorization URL', function () {
@@ -140,7 +146,7 @@ describe('GET /xero/auth - Authorization Route', function () {
         $authorizationUrl = 'https://login.xero.com/identity/connect/authorize';
         $expectedScopes = config('laravel-xero-oauth.oauth.scopes');
 
-        $this->mock(Xero::class, function (MockInterface $mock) use ($authorizationUrl, $expectedScopes) {
+        mock(Xero::class, function (MockInterface $mock) use ($authorizationUrl, $expectedScopes) {
             $mock->shouldReceive('getAuthorizationUrl')
                 ->with(Mockery::on(function ($param) use ($expectedScopes) {
                     return isset($param['scope']) &&
@@ -150,10 +156,11 @@ describe('GET /xero/auth - Authorization Route', function () {
                 ->andReturn($authorizationUrl);
         });
 
-        $response = $this->actingAs($user)->get('/xero/auth');
+        actingAs($user);
 
-        $response->assertStatus(302);
-        $response->assertRedirect($authorizationUrl);
+        get('/xero/auth')
+            ->assertStatus(302)
+            ->assertRedirect($authorizationUrl);
     });
 });
 
@@ -168,7 +175,7 @@ describe('GET /xero/callback - OAuth Callback Route', function () {
             'scope' => 'openid email profile offline_access',
         ]);
 
-        $this->mock(Xero::class, function (MockInterface $mock) use ($accessToken) {
+        mock(Xero::class, function (MockInterface $mock) use ($accessToken) {
             $mock->shouldReceive('getAccessToken')
                 ->with('authorization_code', Mockery::on(function ($param) {
                     return isset($param['code']) && $param['code'] === 'valid_code';
@@ -176,17 +183,17 @@ describe('GET /xero/callback - OAuth Callback Route', function () {
                 ->andReturn($accessToken);
         });
 
-        $response = $this->get('/xero/callback?code=valid_code');
+        get('/xero/callback?code=valid_code')
+            ->assertRedirect(route('xero.index'));
 
-        $response->assertRedirect(route('xero.index'));
         expect(XeroToken::count())->toBe(1);
         expect(XeroToken::latest()->first()->access_token)->toBe($accessToken->getToken());
     });
 
     it('throws unauthorized exception when code parameter is missing', function () {
-        $this->mock(Xero::class);
+        mock(Xero::class);
 
-        $this->get('/xero/callback')
+        get('/xero/callback')
             ->assertStatus(500);
     });
 
@@ -198,12 +205,12 @@ describe('GET /xero/callback - OAuth Callback Route', function () {
             // Missing required fields: id_token, refresh_token, scope
         ]);
 
-        $this->mock(Xero::class, function (MockInterface $mock) use ($invalidToken) {
+        mock(Xero::class, function (MockInterface $mock) use ($invalidToken) {
             $mock->shouldReceive('getAccessToken')
                 ->andReturn($invalidToken);
         });
 
-        $this->get('/xero/callback?code=test_code')
+        get('/xero/callback?code=test_code')
             ->assertStatus(500);
     });
 
@@ -217,13 +224,12 @@ describe('GET /xero/callback - OAuth Callback Route', function () {
             'scope' => 'openid email profile offline_access',
         ]);
 
-        $this->mock(Xero::class, function (MockInterface $mock) use ($accessToken) {
+        mock(Xero::class, function (MockInterface $mock) use ($accessToken) {
             $mock->shouldReceive('getAccessToken')->andReturn($accessToken);
         });
 
-        $response = $this->get('/xero/callback?code=test_code_123');
-
-        $response->assertRedirect(route('xero.index'));
+        get('/xero/callback?code=test_code_123')
+            ->assertRedirect(route('xero.index'));
     });
 
     it('redirects to custom url when callback_redirect_session_name is set in session', function () {
@@ -236,20 +242,19 @@ describe('GET /xero/callback - OAuth Callback Route', function () {
             'scope' => 'openid email profile offline_access',
         ]);
 
-        $this->mock(Xero::class, function (MockInterface $mock) use ($accessToken) {
+        mock(Xero::class, function (MockInterface $mock) use ($accessToken) {
             $mock->shouldReceive('getAccessToken')->andReturn($accessToken);
         });
 
         $customUrl = 'https://example.com/custom-callback-path';
-        Session::put('xero_callback_redirect', $customUrl);
+        session(['xero_callback_redirect' => $customUrl]);
         config(['laravel-xero-oauth.callback_redirect_session_name' => 'xero_callback_redirect']);
 
-        $response = $this->get('/xero/callback?code=test_code_123');
-
-        $response->assertRedirect($customUrl);
+        get('/xero/callback?code=test_code_123')
+            ->assertRedirect($customUrl);
     });
 
-    it('sets tenant_id in token data when multi_tenant_model is configured', function () {
+    it('does not get tenant_id in token data when multi_tenant_model is configured but no session name is set', function () {
         $accessToken = new AccessToken([
             'access_token' => 'access_'.Str::random(40),
             'refresh_token' => 'refresh_'.Str::random(40),
@@ -259,19 +264,19 @@ describe('GET /xero/callback - OAuth Callback Route', function () {
             'scope' => 'openid email profile offline_access',
         ]);
 
-        $this->mock(Xero::class, function (MockInterface $mock) use ($accessToken) {
+        mock(Xero::class, function (MockInterface $mock) use ($accessToken) {
             $mock->shouldReceive('getAccessToken')->andReturn($accessToken);
         });
 
         config(['laravel-xero-oauth.multi_tenant_model' => 'App\\Models\\Tenant']);
 
-        $response = $this->get('/xero/callback?code=valid_code');
+        get('/xero/callback?code=valid_code')
+            ->assertRedirect(route('xero.index'));
 
-        $response->assertRedirect(route('xero.index'));
-        expect(XeroToken::count())->toBe(1);
+        expect(XeroToken::count())->toBe(0);
         // tenant_id should be null since no session is set
-        expect(XeroToken::latest()->first()->tenant_id)->toBeNull();
-    })->throws(UnauthorizedTenancyXeroException::class, 'No tenant session name configured');
+        expect(XeroToken::latest()->first()?->tenant_id)->toBeNull();
+    });
 
     it('does not break when session variables are not configured', function () {
         $accessToken = new AccessToken([
@@ -283,23 +288,22 @@ describe('GET /xero/callback - OAuth Callback Route', function () {
             'scope' => 'openid email profile offline_access',
         ]);
 
-        $this->mock(Xero::class, function (MockInterface $mock) use ($accessToken) {
+        mock(Xero::class, function (MockInterface $mock) use ($accessToken) {
             $mock->shouldReceive('getAccessToken')->andReturn($accessToken);
         });
 
         // Leave multi_tenant_model unconfigured - should work fine
-        $response = $this->get('/xero/callback?code=valid_code');
+        get('/xero/callback?code=valid_code')
+            ->assertRedirect(route('xero.index'));
 
-        $response->assertRedirect(route('xero.index'));
         expect(XeroToken::count())->toBe(1);
     });
 });
 
 describe('POST /xero/tenants/{tenantId} - Switch Tenant Route', function () {
     it('redirects to login if user is not authenticated', function () {
-        $response = $this->post('/xero/tenants/12345678-1234-1234-1234-123456789012/');
-
-        $response->assertRedirect('/login');
+        $this->post('/xero/tenants/12345678-1234-1234-1234-123456789012/')
+            ->assertRedirect('/login');
     });
 
     it('updates the current_tenant_id when authenticated user submits post', function () {
@@ -307,9 +311,10 @@ describe('POST /xero/tenants/{tenantId} - Switch Tenant Route', function () {
         $xeroToken = XeroToken::factory()->create(['current_tenant_id' => null]);
         $newTenantId = Str::uuid();
 
-        $response = $this->actingAs($user)->post("/xero/tenants/{$newTenantId}/");
+        actingAs($user);
 
-        $response->assertRedirect();
+        post("/xero/tenants/{$newTenantId}/")
+            ->assertRedirect();
         expect($xeroToken->refresh()->current_tenant_id)->toBe((string) $newTenantId);
     });
 
@@ -319,9 +324,11 @@ describe('POST /xero/tenants/{tenantId} - Switch Tenant Route', function () {
         $latestToken = XeroToken::factory()->create(['current_tenant_id' => null]);
         $newTenantId = Str::uuid();
 
-        $response = $this->actingAs($user)->post("/xero/tenants/{$newTenantId}/");
+        actingAs($user);
 
-        $response->assertRedirect();
+        post("/xero/tenants/{$newTenantId}/")
+            ->assertRedirect();
+
         expect($oldToken->refresh()->current_tenant_id)->toBe('old_tenant');
         expect($latestToken->refresh()->current_tenant_id)->toBe((string) $newTenantId);
     });
@@ -330,18 +337,21 @@ describe('POST /xero/tenants/{tenantId} - Switch Tenant Route', function () {
         $user = createTestUser();
         XeroToken::factory()->create();
         $tenantId = Str::uuid();
+        $previousUrl = '/previous-page';
 
-        $response = $this->actingAs($user)
-            ->from('/previous-page')
-            ->post("/xero/tenants/{$tenantId}/");
+        actingAs($user);
 
-        $response->assertRedirect('/previous-page');
+        post("/xero/tenants/{$tenantId}/", headers: ['Referer' => $previousUrl])
+            ->assertRedirect($previousUrl);
     });
 
     it('returns not found when no latest token exists', function () {
         $user = createTestUser();
         $tenantId = Str::uuid();
 
-        $this->actingAs($user)->post("/xero/tenants/{$tenantId}/")->assertNotFound();
+        actingAs($user);
+
+        post("/xero/tenants/{$tenantId}/")
+            ->assertNotFound();
     });
 });

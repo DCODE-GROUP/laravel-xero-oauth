@@ -1,6 +1,5 @@
 <?php
 
-use Dcodegroup\LaravelXeroOauth\Exceptions\UnauthorizedTenancyXeroException;
 use Dcodegroup\LaravelXeroOauth\Models\XeroToken;
 use Dcodegroup\LaravelXeroOauth\XeroTokenService;
 
@@ -47,7 +46,7 @@ describe('Tenant Security', function () {
         $tokens = XeroToken::all();
         // Assert that we do not retrieve any tokens.
         expect($tokens)->toHaveCount(0);
-    })->throws(UnauthorizedTenancyXeroException::class, 'No tenant authenticated');
+    });
 
     it('does not retrieve tokens if session name is not set', function () {
         config(['laravel-xero-oauth.current_app_tenant_session_name' => null]);
@@ -56,7 +55,7 @@ describe('Tenant Security', function () {
         // Assert that we do not retrieve any tokens.
         expect($tokens)->toHaveCount(0);
 
-    })->throws(UnauthorizedTenancyXeroException::class, 'No tenant session name configured');
+    });
 
     afterEach(function () {
         // Clean up any tokens created during the tests.
